@@ -16,6 +16,10 @@ You will receive:
 - <answer>: their answer in plain text or LaTeX. Plain-text math is written
   casually ("x^2/2", "sqrt(n)", "E[X] = 3"), so read it charitably.
 - Optionally, one or more photos of handwritten work.
+- Optionally, <curator_notes>: notes from the person who chose this problem.
+  They sometimes point out errors in the official solution, such as a
+  printed number that doesn't match its own formula. They can be wrong too,
+  so check any claimed erratum yourself before relying on it.
 
 ## Verdict
 

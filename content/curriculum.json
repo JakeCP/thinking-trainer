@@ -1,0 +1,1335 @@
+[
+  {
+    "id": 1,
+    "name": "Base rates and Bayesian updating (including signal detection)",
+    "question": "How much should this evidence move me, given how likely this was beforehand?",
+    "summary": "Update prior odds by the evidence's likelihood ratio, rather than confusing the probability of evidence with the probability of a hypothesis. Signal detection separates discriminability from the threshold that trades missed signals against false alarms.",
+    "prerequisites": [],
+    "resources": [
+      {
+        "title": "Bayesian Updating with Discrete Priors",
+        "source": "MIT OCW 18.05, Spring 2022",
+        "section": "Class 11 reading; sections 2–3 and the base-rate example in the appendix",
+        "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class11-prep.pdf",
+        "verified": true
+      },
+      {
+        "title": "Signal Detection Theory",
+        "source": "David Heeger, New York University",
+        "section": "Probability of Occurrence Curves; The Receiver Operating Characteristic; discriminability index",
+        "url": "https://www.cns.nyu.edu/~david/courses/perception/lecturenotes/sdt/sdt.html",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 2, section 3, problem 2",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "situation_based": true,
+        "notes": "Spam classification; statement and solution in the same PDF.",
+        "verified": true
+      },
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 2, section 3, problem 3",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "situation_based": true,
+        "notes": "Dependence between pieces of evidence; sequential updating.",
+        "verified": true
+      },
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 2, section 3, problem 4",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "situation_based": true,
+        "notes": "Blood-type evidence and competing suspects.",
+        "verified": true
+      },
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 2, section 3, problem 5",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_2.pdf",
+        "situation_based": true,
+        "notes": "Infer the strength of a chess opponent.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L01-S1: Pager thresholds and false alarms",
+        "problem_url": "substitute_exercises.html#L01-S1-problem",
+        "solution_url": "substitute_exercises.html#L01-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Four externally solved Bayes exercises verified. No separately numbered, publicly solved ROC/threshold exercise was verified; the pager exercise supplies that missing practice."
+  },
+  {
+    "id": 2,
+    "name": "Sampling noise and the law of small numbers",
+    "question": "How much of this could be noise, given the sample size?",
+    "summary": "Sample statistics fluctuate, and smaller samples usually fluctuate more. Under independent finite-variance sampling, standard errors shrink with the square root of sample size; more observations do not remove systematic selection or measurement bias.",
+    "prerequisites": [],
+    "resources": [
+      {
+        "title": "Central Limit Theorem and the Law of Large Numbers",
+        "source": "MIT OCW 18.05, Spring 2022",
+        "section": "Class 6b reading; sections on the law of large numbers, sums, averages and the central limit theorem",
+        "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class06-prep-b.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 4, problem 2(a): Elections",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "situation_based": true,
+        "notes": "Use part (a); the later multiparty wording contains a percentage inconsistency.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 4, problem 3: A penny for your thoughts",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "situation_based": true,
+        "notes": "Rounding errors over many bakery transactions, with simulation code.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 10, problem 1: Z",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset10_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset10_sol.pdf",
+        "situation_based": false,
+        "notes": "Confidence-interval width and changing sample size.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 10, problem 2: Soda",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset10_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset10_sol.pdf",
+        "situation_based": true,
+        "notes": "Sampling uncertainty in beverage fill amounts.",
+        "verified": true
+      }
+    ],
+    "gaps": "The exercises emphasize CLT and interval width. They do not separately test the psychological claim that tiny samples must resemble a population; the reading supplies the probabilistic correction."
+  },
+  {
+    "id": 3,
+    "name": "Regression to the mean and shrinkage",
+    "question": "How much of this extreme result will persist?",
+    "summary": "An extreme measurement often combines persistent differences with unusually favorable or unfavorable noise. Shrinkage estimates persistent performance by combining noisy observations with a relevant population model, rather than projecting the full extreme into the future.",
+    "prerequisites": [
+      1,
+      2
+    ],
+    "resources": [
+      {
+        "title": "Conjugate Priors: Beta and Normal",
+        "source": "MIT OCW 18.05, Spring 2022",
+        "section": "Class 15 reading; beta-binomial and normal-normal posterior means",
+        "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15-prep.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Class 15, Concept questions 3–4, PDF pp. 1–2",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "situation_based": false,
+        "notes": "Treat this paired graphical exercise as one item: posterior location and precision.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Class 15, Board questions, problem 1: Beta priors, PDF pp. 3–4",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "situation_based": true,
+        "notes": "Treatment-success estimate shrunk toward a prior.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Class 15, Board questions, problem 2: Normal-normal updating, PDF pp. 4–5",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "situation_based": false,
+        "notes": "Numerical precision-weighted posterior mean; distinguish from the second Problem 2 below.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Class 15, Problem 2: Normal/normal (basketball), PDF p. 5",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class15_pset_sol.pdf",
+        "situation_based": true,
+        "notes": "The PDF repeats the number 2. This is the Sophie Lie free-throw problem.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L03-S1: Forecast a second performance measurement",
+        "problem_url": "substitute_exercises.html#L03-S1-problem",
+        "solution_url": "substitute_exercises.html#L03-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "The source repeats the label Problem 2; page and topic disambiguate the two entries. Population-level variance estimation and empirical-Bayes fitting are not covered; the original repeated-measurement exercise makes regression to the mean explicit."
+  },
+  {
+    "id": 4,
+    "name": "Selection effects, survivorship and collider bias",
+    "question": "What decided which cases I get to see?",
+    "summary": "The process that admits cases into a dataset changes the probabilities you should use. Conditioning on a common consequence can create an association between otherwise independent causes, and observing only survivors can hide failures.",
+    "prerequisites": [
+      1
+    ],
+    "resources": [
+      {
+        "title": "The Effect: Causal Paths and Closing Back Doors",
+        "source": "Nick Huntington-Klein, author-hosted textbook",
+        "section": "Chapter 8; open and closed paths, colliders, conditioning and back-door paths",
+        "url": "https://theeffectbook.net/ch-CausalPaths.html",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 3, section 1, problem 1",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "situation_based": true,
+        "notes": "Biased door-revealing protocol in Monty Hall.",
+        "verified": true
+      },
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 3, section 1, problem 2(b)",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "situation_based": false,
+        "notes": "Conditional independence can fail after conditioning. The short answer refers to the class fire/popcorn example; use the core reading for a full collider explanation.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 2, problem 1: Binary paradox",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset02_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset02_sol.pdf",
+        "situation_based": true,
+        "notes": "Different information-selection rules change the reference set.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L04-S1: The survivor-only project dashboard",
+        "problem_url": "substitute_exercises.html#L04-S1-problem",
+        "solution_url": "substitute_exercises.html#L04-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L04-S2: Hiring on either of two strengths",
+        "problem_url": "substitute_exercises.html#L04-S2-problem",
+        "solution_url": "substitute_exercises.html#L04-S2-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Three solved conditioning exercises were verified, but no suitable complete public causal-selection answer set was verified. The Effect assignment repository withholds its answer key from the public; the two original cases supply survivorship and explicit collider calculations."
+  },
+  {
+    "id": 5,
+    "name": "Confounding and causal diagrams (including Simpson's paradox)",
+    "question": "What comparison would separate the effect from differences that existed anyway?",
+    "summary": "An observed difference may reflect pre-existing causes of both treatment and outcome rather than the treatment itself. Causal diagrams clarify which variables to adjust for, which not to adjust for, and why a voluntary pilot is not equivalent to randomized assignment.",
+    "prerequisites": [
+      4
+    ],
+    "resources": [
+      {
+        "title": "The Effect: Causal Diagrams",
+        "source": "Nick Huntington-Klein, author-hosted textbook",
+        "section": "Chapter 6; causal diagrams and their interpretation",
+        "url": "https://theeffectbook.net/ch-CausalDiagrams.html",
+        "verified": true
+      },
+      {
+        "title": "The Effect: Causal Paths and Closing Back Doors",
+        "source": "Nick Huntington-Klein, author-hosted textbook",
+        "section": "Chapter 8; back-door adjustment and collider paths",
+        "url": "https://theeffectbook.net/ch-CausalPaths.html",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 3, section 2, problem 1(a–b)",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "situation_based": true,
+        "notes": "Compare common versus differing mixture weights; part (b) is a Simpson reversal.",
+        "verified": true
+      },
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 3, section 2, problem 2",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "situation_based": true,
+        "notes": "Lisa, Homer and the relevant elephant reference class.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L05-S1: A voluntary engineering pilot with zero effect",
+        "problem_url": "substitute_exercises.html#L05-S1-problem",
+        "solution_url": "substitute_exercises.html#L05-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L05-S2: Adjusting for confounders, mediators and colliders",
+        "problem_url": "substitute_exercises.html#L05-S2-problem",
+        "solution_url": "substitute_exercises.html#L05-S2-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Only two externally solved reference-class/Simpson exercises were verified. No open answer key for The Effect assignments was verified; original solved simulations supply the missing causal-identification and voluntary-pilot practice."
+  },
+  {
+    "id": 6,
+    "name": "Multiple comparisons and forking paths",
+    "question": "How many chances were there to find this?",
+    "summary": "A single reported significant result can be the winner of many explicit tests or data-dependent analysis choices. Error control requires considering the selection procedure, not merely the final reported comparison; family-wise error and false discovery rate answer different questions.",
+    "prerequisites": [
+      2
+    ],
+    "resources": [
+      {
+        "title": "Multiple Testing",
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "section": "Chapter 13 lab; Family-Wise Error Rate, False Discovery Rate and A Re-Sampling Approach",
+        "url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "verified": true
+      },
+      {
+        "title": "The garden of forking paths",
+        "source": "Andrew Gelman and Eric Loken, author-hosted manuscript",
+        "section": "Sections 1 and 4; data-dependent analysis without deliberate fishing",
+        "url": "https://sites.stat.columbia.edu/gelman/research/unpublished/p_hacking.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 13 lab, Review of Hypothesis Tests: 100-variable simulation",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "situation_based": false,
+        "notes": "WORKED-LAB SUBSTITUTE, not an end-of-chapter exercise. Recreate both signal-strength cases and the decision tables before revealing the code.",
+        "verified": true
+      },
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 13 lab, Family-Wise Error Rate: Fund managers",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Recreate raw, Bonferroni/Holm and pairwise-comparison results; code and outputs are on the page.",
+        "verified": true
+      },
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 13 lab, False Discovery Rate",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Reproduce the Benjamini–Hochberg calculation and rejection plot.",
+        "verified": true
+      },
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 13 lab, A Re-Sampling Approach",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch13-multiple-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Reproduce permutation-based gene screening and compare FDR cutoffs.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L06-S1: One reported result from twenty possible analyses",
+        "problem_url": "substitute_exercises.html#L06-S1-problem",
+        "solution_url": "substitute_exercises.html#L06-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Four author-solved lab blocks are supplied rather than claiming an official public end-of-chapter solution manual. The original simulation illustrates selecting among possible analyses in a fixed family; it is not a complete model of all forking paths."
+  },
+  {
+    "id": 7,
+    "name": "Overfitting and out-of-sample validation",
+    "question": "Does this predict new cases, or just fit old ones?",
+    "summary": "More flexible models can improve training fit while worsening predictions on new observations. Validation must keep model selection and preprocessing inside the training procedure; using the test data to make those choices compromises the test.",
+    "prerequisites": [
+      2,
+      6
+    ],
+    "resources": [
+      {
+        "title": "Cross-Validation and the Bootstrap",
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "section": "Chapter 5 lab; The Validation Set Approach and Cross-Validation",
+        "url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "verified": true
+      },
+      {
+        "title": "Linear Models and Regularization Methods",
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "section": "Chapter 6 lab; Choosing Among Models Using the Validation Set Approach and Cross-Validation",
+        "url": "https://islp.readthedocs.io/en/latest/labs/Ch06-varselect-lab.html",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 5 lab, The Validation Set Approach",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Auto data: linear, quadratic and cubic models under two splits.",
+        "verified": true
+      },
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 5 lab, Cross-Validation: leave-one-out block",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Auto data: compare polynomial degrees 1–5 using LOOCV.",
+        "verified": true
+      },
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 5 lab, Cross-Validation: KFold(n_splits=10) block",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch05-resample-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Compare the same model degrees using ten folds; compare runtime and error with LOOCV.",
+        "verified": true
+      },
+      {
+        "source": "An Introduction to Statistical Learning with Applications in Python: author-maintained labs",
+        "problem_ref": "Chapter 6 lab, Choosing Among Models Using the Validation Set Approach and Cross-Validation",
+        "problem_url": "https://islp.readthedocs.io/en/latest/labs/Ch06-varselect-lab.html",
+        "solution_url": "https://islp.readthedocs.io/en/latest/labs/Ch06-varselect-lab.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Hitters salary prediction; rerun variable selection separately within each training fold.",
+        "verified": true
+      }
+    ],
+    "gaps": "All four are reproducible worked lab blocks, not numbered unsolved textbook questions. The two cross-validation items intentionally use the same dataset and model family. Temporal, grouped and distribution-shift validation require further practice."
+  },
+  {
+    "id": 8,
+    "name": "Tails, ruin and nonlinearity",
+    "question": "What happens in the bad tail, and is the outcome at the average input the average outcome?",
+    "summary": "An expected value can conceal dispersion, catastrophic outcomes and the effects of nonlinear transformations. Tail shape, dependence and absorbing failure states can dominate decisions even when average returns or individual component risks look attractive.",
+    "prerequisites": [
+      1,
+      2
+    ],
+    "resources": [
+      {
+        "title": "Uncertainty: expected value, expected utility and risk preferences",
+        "source": "MIT OCW 14.01, Fall 2023",
+        "section": "Full Lecture Summaries, section 9.1, Lecture 20; PDF pp. 34–35",
+        "url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_full.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Harvard Stat 110, Strategic Practice (2011)",
+        "problem_ref": "Strategic Practice 3, section 3, problem 1",
+        "problem_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "solution_url": "https://stat110.hsites.harvard.edu/sites/g/files/omnuum10111/files/stat110/files/strategic_practice_and_homework_3.pdf",
+        "situation_based": true,
+        "notes": "A negatively drifting random walk and the probability of ever reaching a target.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 4, problem 5: Transformations affect mean and median",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "situation_based": false,
+        "notes": "Use the distributions defined in problem 4. Nonlinear averaging; all definitions and solutions are in this PDF.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.05, Spring 2022",
+        "problem_ref": "Problem Set 4, problem 6(a–c): Fat tails",
+        "problem_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_pset04_sol.pdf",
+        "situation_based": true,
+        "notes": "Compare normal and Student-t tail probabilities under matched variance.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 14.01, Fall 2023",
+        "problem_ref": "Problem Set 7, problem 2: Portfolio Diversification",
+        "problem_url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_pset7sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_pset7sol.pdf",
+        "situation_based": true,
+        "notes": "Risky-versus-safe allocation under nonlinear utility; not a two-risky-asset correlation exercise.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L08-S1: Shared outages defeat diversification",
+        "problem_url": "substitute_exercises.html#L08-S1-problem",
+        "solution_url": "substitute_exercises.html#L08-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L08-S2: Positive expected growth with a zero median",
+        "problem_url": "substitute_exercises.html#L08-S2-problem",
+        "solution_url": "substitute_exercises.html#L08-S2-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "The core reading is a short risk-preferences introduction, not a complete heavy-tail treatment. Published exercises cover nonlinear expectation and tail probabilities; original examples cover correlated catastrophic loss and absorbing ruin. No complete dedicated public solved set spanning all these subtopics was verified."
+  },
+  {
+    "id": 9,
+    "name": "Opportunity cost and the margin",
+    "question": "What's the best alternative I give up, and what does the next unit buy?",
+    "summary": "A choice costs the best alternative use of the resources it consumes, not just its invoice price. Compare marginal benefit with marginal opportunity cost, and do not let an unrecoverable past expense change a forward-looking choice.",
+    "prerequisites": [],
+    "resources": [
+      {
+        "title": "How Individuals Make Choices Based on Their Budget Constraint",
+        "source": "OpenStax, Principles of Economics 3e",
+        "section": "Section 2.1; opportunity cost and marginal decision-making",
+        "url": "https://openstax.org/books/principles-economics-3e/pages/2-1-how-individuals-make-choices-based-on-their-budget-constraint",
+        "verified": true
+      },
+      {
+        "title": "Consumption Choices",
+        "source": "OpenStax, Principles of Economics 3e",
+        "section": "Section 6.1; diminishing marginal utility and marginal utility per dollar",
+        "url": "https://openstax.org/books/principles-economics-3e/pages/6-1-consumption-choices",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 2, Self-Check question 1",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/2-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-2",
+        "situation_based": true,
+        "notes": "Bus tickets and burgers; opportunity cost after a price change.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 2, Self-Check question 2",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/2-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-2",
+        "situation_based": true,
+        "notes": "Healthcare productivity and the opportunity cost of education.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 6, Self-Check question 1",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/6-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-6",
+        "situation_based": true,
+        "notes": "Discrete allocation between visits and phone calls.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 6, Self-Check question 2",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/6-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-6",
+        "situation_based": true,
+        "notes": "The same case solved by marginal utility per dollar; explicitly a second numbered question.",
+        "verified": true
+      },
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 5(c), Paid in the USA",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": true,
+        "notes": "A prior non-refundable payment is sunk; read the question's setup and parts (a–b) first.",
+        "verified": true
+      }
+    ],
+    "gaps": "OpenStax practice is introductory rather than calculus-heavy. Questions 6.1 and 6.2 reuse one case. The sunk-cost exercise has a game-theory setup; lens 14 helps with that optional fifth item."
+  },
+  {
+    "id": 10,
+    "name": "Comparative advantage",
+    "question": "Who gives up least by doing this?",
+    "summary": "Assign work by relative opportunity cost, not simply by who is fastest at everything. Specialization can create gains even when one person or country has an absolute advantage in every task, subject to coordination and exchange costs.",
+    "prerequisites": [
+      9
+    ],
+    "resources": [
+      {
+        "title": "Absolute and Comparative Advantage",
+        "source": "OpenStax, Principles of Microeconomics 3e",
+        "section": "Section 19.1; opportunity-cost comparisons and gains from trade",
+        "url": "https://openstax.org/books/principles-microeconomics-3e/pages/19-1-absolute-and-comparative-advantage",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "OpenStax, Principles of Microeconomics 3e",
+        "problem_ref": "Chapter 19, Self-Check question 1",
+        "problem_url": "https://openstax.org/books/principles-microeconomics-3e/pages/19-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-microeconomics-3e/pages/chapter-19",
+        "situation_based": false,
+        "notes": "Conceptual check: comparative advantage need not derive only from natural endowments.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Microeconomics 3e",
+        "problem_ref": "Chapter 19, Self-Check question 2",
+        "problem_url": "https://openstax.org/books/principles-microeconomics-3e/pages/19-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-microeconomics-3e/pages/chapter-19",
+        "situation_based": true,
+        "notes": "Brazil/United States beef and autos.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Microeconomics 3e",
+        "problem_ref": "Chapter 19, Self-Check question 4",
+        "problem_url": "https://openstax.org/books/principles-microeconomics-3e/pages/19-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-microeconomics-3e/pages/chapter-19",
+        "situation_based": true,
+        "notes": "Germany/Poland cameras and televisions.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 14.01, Fall 2023",
+        "problem_ref": "Problem Set 7, problem 5: Trade and PPF",
+        "problem_url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_pset7sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_pset7sol.pdf",
+        "situation_based": true,
+        "notes": "India/Ukraine: opportunity costs, specialization and feasible consumption.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.010, Fall 2004",
+        "problem_ref": "Lecture 18, Comparative Advantage Example, slides 4–5",
+        "problem_url": "https://ocw.mit.edu/courses/15-010-economic-analysis-for-business-decisions-fall-2004/ddab135f53438ae34741de7438d2cd64_incentives_emply.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-010-economic-analysis-for-business-decisions-fall-2004/ddab135f53438ae34741de7438d2cd64_incentives_emply.pdf",
+        "situation_based": true,
+        "notes": "WORKED-EXAMPLE SUBSTITUTE. Anna and Barry split programming and debugging; especially relevant to engineering teams.",
+        "verified": true
+      }
+    ],
+    "gaps": "The first item is a conceptual warm-up. The coding/debugging case is an explicitly labeled worked example. Coordination costs and changing comparative advantage through learning are not separately exercised."
+  },
+  {
+    "id": 11,
+    "name": "Value of information (including explore versus exploit)",
+    "question": "Could finding out change my decision enough to be worth the cost?",
+    "summary": "Information is valuable when it improves a choice, not simply because it reduces uncertainty. Sequential decisions also require weighing the immediate payoff of a known option against learning that can improve later choices.",
+    "prerequisites": [
+      1,
+      8,
+      9
+    ],
+    "resources": [
+      {
+        "title": "Decision trees 2: the value of information",
+        "source": "MIT OCW 15.053, Spring 2013",
+        "section": "Lecture 19; decision trees with and without additional information",
+        "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/b68f3b255275ffa42099958e373248b1_MIT15_053S13_lec19.pdf",
+        "verified": true
+      },
+      {
+        "title": "Think Bayes, Chapter 10: Testing",
+        "source": "Allen B. Downey, author-hosted textbook",
+        "section": "Sections 10.5–10.10; Bayesian bandits and posterior-sampling strategy",
+        "url": "https://allendowney.github.io/ThinkBayes2/chap10.html",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 15.053, Spring 2013",
+        "problem_ref": "Recitation 10, problem 1: Airfare",
+        "problem_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4677bfe54991d59b488511ba62032dcb_MIT15_053S13_rec10sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4677bfe54991d59b488511ba62032dcb_MIT15_053S13_rec10sol.pdf",
+        "situation_based": true,
+        "notes": "Learning future prices matters because refundable purchase preserves a later choice.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.053, Spring 2013",
+        "problem_ref": "Recitation 10, problem 2: Value of Information",
+        "problem_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4677bfe54991d59b488511ba62032dcb_MIT15_053S13_rec10sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4677bfe54991d59b488511ba62032dcb_MIT15_053S13_rec10sol.pdf",
+        "situation_based": true,
+        "notes": "Compare information arriving before versus after the commitment to play.",
+        "verified": true
+      },
+      {
+        "source": "Allen B. Downey, Think Bayes",
+        "problem_ref": "Chapter 10, sections 10.5–10.10: Bayesian bandit simulation",
+        "problem_url": "https://allendowney.github.io/ThinkBayes2/chap10.html",
+        "solution_url": "https://allendowney.github.io/ThinkBayes2/chap10.html",
+        "situation_based": true,
+        "notes": "WORKED-LAB SUBSTITUTE. Rebuild the posterior-sampling policy and compare cumulative wins against always choosing a known arm.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L11-S1: What is a noisy pilot worth?",
+        "problem_url": "substitute_exercises.html#L11-S1-problem",
+        "solution_url": "substitute_exercises.html#L11-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Two numbered exercises and one author-worked bandit example were verified. The fourth exercise is an original EVPI/EVSI calculation. No numerical optimal-policy solution for arbitrary bandit horizons is claimed; posterior sampling is the demonstrated policy."
+  },
+  {
+    "id": 12,
+    "name": "Incentives, principal-agent and multitask problems",
+    "question": "What will people optimize under this reward, and what unmeasured work suffers?",
+    "summary": "An agent responds to the incentives and information in a contract, which need not match the principal's objective. Rewarding a measurable proxy can redirect effort, encourage gaming and crowd out valuable work that is harder to measure.",
+    "prerequisites": [
+      9,
+      14
+    ],
+    "resources": [
+      {
+        "title": "Incentives and Employment",
+        "source": "MIT OCW 15.010, Fall 2004",
+        "section": "Lecture 18; slides 1–3 and 6–10, especially multitasking on slide 8",
+        "url": "https://ocw.mit.edu/courses/15-010-economic-analysis-for-business-decisions-fall-2004/ddab135f53438ae34741de7438d2cd64_incentives_emply.pdf",
+        "verified": true
+      },
+      {
+        "title": "Sequential Games: Moral Hazard, Incentives, and Hungry Lions",
+        "source": "Open Yale Courses ECON 159",
+        "section": "Lecture 13; investment and lending moral-hazard example",
+        "url": "https://oyc.yale.edu/economics/econ-159/lecture-13",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 3(a–c), Poverty Traps",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": true,
+        "notes": "Lending, repayment incentives and the effect of changing outside options. Cross-listed with lens 14.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.010, Fall 2004",
+        "problem_ref": "Lecture 18, Outsourcing Sales, slides 1–3",
+        "problem_url": "https://ocw.mit.edu/courses/15-010-economic-analysis-for-business-decisions-fall-2004/ddab135f53438ae34741de7438d2cd64_incentives_emply.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-010-economic-analysis-for-business-decisions-fall-2004/ddab135f53438ae34741de7438d2cd64_incentives_emply.pdf",
+        "situation_based": true,
+        "notes": "WORKED-EXAMPLE SUBSTITUTE. Compare the station's incentive with the sales contractor's marginal commission.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L12-S1: Measured delivery versus unmeasured maintenance",
+        "problem_url": "substitute_exercises.html#L12-S1-problem",
+        "solution_url": "substitute_exercises.html#L12-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L12-S2: Ticket splitting under a count-based reward",
+        "problem_url": "substitute_exercises.html#L12-S2-problem",
+        "solution_url": "substitute_exercises.html#L12-S2-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "No complete public four-problem solved set on multitask incentives and Goodhart effects was verified. Two external cases are supplemented by two original contract/proxy exercises. The original models illustrate mechanisms, not estimates of actual worker behavior."
+  },
+  {
+    "id": 13,
+    "name": "Asymmetric information, adverse selection and signaling",
+    "question": "Who do these terms attract, and what's hard to fake?",
+    "summary": "When one side knows more, the terms of exchange influence which types participate. A useful signal must create different incentives or costs for different types; visible expense alone does not guarantee that it separates them.",
+    "prerequisites": [
+      1,
+      9,
+      14
+    ],
+    "resources": [
+      {
+        "title": "The Problem of Imperfect Information and Asymmetric Information",
+        "source": "OpenStax, Principles of Economics 3e",
+        "section": "Section 16.1; hidden quality, assurance and information problems",
+        "url": "https://openstax.org/books/principles-economics-3e/pages/16-1-the-problem-of-imperfect-information-and-asymmetric-information",
+        "verified": true
+      },
+      {
+        "title": "Asymmetric Information: Silence, Signaling and Suffering Education",
+        "source": "Open Yale Courses ECON 159",
+        "section": "Lecture 23; separating versus pooling and education signaling",
+        "url": "https://oyc.yale.edu/economics/econ-159/lecture-23",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 16, Self-Check question 1",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/16-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-16",
+        "situation_based": true,
+        "notes": "Identify hidden information across ordinary purchases.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 16, Self-Check question 2",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/16-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-16",
+        "situation_based": true,
+        "notes": "Hidden employee attributes and possible signals.",
+        "verified": true
+      },
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 1(d)",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": true,
+        "notes": "Distinguish a uniform tuition reduction from changes in type-dependent signaling costs.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 14.01, Fall 2023",
+        "problem_ref": "Problem Set 8, problem 2, parts 1–4: Health Insurance and Incomplete Information",
+        "problem_url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_pset8sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/14-01-principles-of-microeconomics-fall-2023/mit14_01_f23_pset8sol.pdf",
+        "situation_based": true,
+        "notes": "Stylized insurance pooling and self-selection; market collapse is a possibility, not an unconditional conclusion.",
+        "verified": true
+      }
+    ],
+    "gaps": "Four external solved items verified. The insurance exercise uses a classroom model, not current insurance-policy guidance; its answer on collapse is qualitative."
+  },
+  {
+    "id": 14,
+    "name": "Strategic response: equilibrium, commitment and repeated games",
+    "question": "How will others respond, and is my threat credible?",
+    "summary": "A policy or commitment changes other people's best responses, so its effects cannot be read from your action alone. Backward induction distinguishes credible actions from empty threats; repeated interaction can change cooperation incentives.",
+    "prerequisites": [
+      9
+    ],
+    "resources": [
+      {
+        "title": "Backward Induction: Commitment, Spies, and First-Mover Advantages",
+        "source": "Open Yale Courses ECON 159",
+        "section": "Lecture 14; Stackelberg competition and credible commitment",
+        "url": "https://oyc.yale.edu/economics/econ-159/lecture-14",
+        "verified": true
+      },
+      {
+        "title": "Repeated Games: Cooperation vs. the End Game",
+        "source": "Open Yale Courses ECON 159",
+        "section": "Lecture 21; finite and continuing interaction",
+        "url": "https://oyc.yale.edu/economics/econ-159/lecture-21",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 2",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": false,
+        "notes": "Sequential entry followed by a simultaneous subgame; find subgame-perfect equilibria.",
+        "verified": true
+      },
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 3, Poverty Traps",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": true,
+        "notes": "Repeated lending and repayment. Parts (d–e) are a stretch beyond parts (a–c).",
+        "verified": true
+      },
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 4, Exclusive",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": true,
+        "notes": "Backward induction in sequential club admission.",
+        "verified": true
+      },
+      {
+        "source": "Open Yale Courses ECON 159, Fall 2007 final exam",
+        "problem_ref": "Question 5(a–e), Paid in the USA",
+        "problem_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "solution_url": "https://oyc.yale.edu/sites/default/files/final_exam_2007_solutions_0.pdf",
+        "situation_based": true,
+        "notes": "Sequential lobbying, commitments and sunk versus refundable payments.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L14-S1: Who actually bears a per-unit tax?",
+        "problem_url": "substitute_exercises.html#L14-S1-problem",
+        "solution_url": "substitute_exercises.html#L14-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Four actual Yale final-exam questions verified; no lecture above 24 is cited. A separately verified public tax-incidence exercise was not selected, so an original linear-market exercise supplies that subtopic. The game exercises assume basic payoff matrices and best responses."
+  },
+  {
+    "id": 15,
+    "name": "Externalities and collective action",
+    "question": "Who bears the costs, and what rules make cooperation work?",
+    "summary": "Private choices can create benefits or costs for people who are not party to the transaction. Collective-action problems arise when individually attractive choices prevent mutually beneficial outcomes; institutions can alter those incentives, but their design matters.",
+    "prerequisites": [
+      9,
+      14
+    ],
+    "resources": [
+      {
+        "title": "The Economics of Pollution",
+        "source": "OpenStax, Principles of Economics 3e",
+        "section": "Section 12.1; private versus social costs",
+        "url": "https://openstax.org/books/principles-economics-3e/pages/12-1-the-economics-of-pollution",
+        "verified": true
+      },
+      {
+        "title": "Public Goods",
+        "source": "OpenStax, Principles of Economics 3e",
+        "section": "Section 13.3; nonexcludability, nonrivalry and free riding",
+        "url": "https://openstax.org/books/principles-economics-3e/pages/13-3-public-goods",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 12, Self-Check question 4",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/12-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-12",
+        "situation_based": true,
+        "notes": "Equilibrium before and after pollution costs are internalized.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 12, Self-Check question 12",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/12-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-12",
+        "situation_based": true,
+        "notes": "Two-country environmental protection as a collective-action game.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 13, Self-Check question 3",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/13-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-13",
+        "situation_based": true,
+        "notes": "R&D investment with private versus social returns.",
+        "verified": true
+      },
+      {
+        "source": "OpenStax, Principles of Economics 3e",
+        "problem_ref": "Chapter 13, Self-Check question 7",
+        "problem_url": "https://openstax.org/books/principles-economics-3e/pages/13-self-check-questions",
+        "solution_url": "https://openstax.org/books/principles-economics-3e/pages/chapter-13",
+        "situation_based": true,
+        "notes": "Which services are excludable? Institutional details can change the classification.",
+        "verified": true
+      }
+    ],
+    "gaps": "Four external solved items verified. The quantitative exercises are introductory; detailed commons governance, monitoring costs and alternative institutional designs are not separately exercised."
+  },
+  {
+    "id": 16,
+    "name": "Stocks, flows and feedback with delays",
+    "question": "Am I confusing a level with its rate, and will this correction overshoot?",
+    "summary": "A stock accumulates inflows minus outflows; a falling inflow can still leave the stock rising. Feedback changes those flows in response to the state, and delays can make a correction oscillate or become unstable.",
+    "prerequisites": [],
+    "resources": [
+      {
+        "title": "An Introduction to Feedback",
+        "source": "Leslie A. Martin; MIT OCW 15.988",
+        "section": "Sections 2–4: What Is Feedback?, Positive Feedback, Negative Feedback",
+        "url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/f94fa854452dd69fff5ca7554dfb69f8_feedback.pdf",
+        "verified": true
+      },
+      {
+        "title": "Generic Structures: Exponential Material Delays",
+        "source": "Stephanie Albin; MIT OCW 15.988",
+        "section": "Sections 3–6: examples, model diagram and equations, pulse/step responses, and using material delays",
+        "url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/dfcae521bb8c0fff084205dfe109dc57_generic5.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 15.988, Fall 1998–Spring 1999",
+        "problem_ref": "Assignment 12, exercise 1: Generic Structures—S-shaped Growth",
+        "problem_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/945db476bed956b38edeec696cf53cfe_soln12.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/945db476bed956b38edeec696cf53cfe_soln12.pdf",
+        "situation_based": true,
+        "notes": "Model product adoption, abandonment and feedback; prompts and worked answers are reproduced.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.988, Fall 1998–Spring 1999",
+        "problem_ref": "Assignment 12, exercise 3: Reverse Graphical Integration",
+        "problem_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/945db476bed956b38edeec696cf53cfe_soln12.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/945db476bed956b38edeec696cf53cfe_soln12.pdf",
+        "situation_based": false,
+        "notes": "Infer net flows from the shape of a stock trajectory.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.988, Fall 1998–Spring 1999",
+        "problem_ref": "Assignment 12, exercise 4(A): Internet",
+        "problem_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/945db476bed956b38edeec696cf53cfe_soln12.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/945db476bed956b38edeec696cf53cfe_soln12.pdf",
+        "situation_based": true,
+        "notes": "Identify units and simulate exponential word-of-mouth growth; critique the unlimited-growth assumption.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.988, Fall 1998–Spring 1999",
+        "problem_ref": "Assignment 24, exercise 1(A): Exponential Material Delays",
+        "problem_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/9bc32ea079e38290f20e7a8e8c65d89f_soln24.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-988-system-dynamics-self-study-fall-1998-spring-1999/9bc32ea079e38290f20e7a8e8c65d89f_soln24.pdf",
+        "situation_based": true,
+        "notes": "Translate a training pipeline into stocks, flows and an eight-month delay.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L16-S1: The same correction gain with and without delay",
+        "problem_url": "substitute_exercises.html#L16-S1-problem",
+        "solution_url": "substitute_exercises.html#L16-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Four external solved exercises verified. The course uses Vensim notation, but these selected models can be implemented in Python without commercial software or the separately referenced books. The original control exercise explicitly tests delay-induced overshoot and instability."
+  },
+  {
+    "id": 17,
+    "name": "Queues: Little's law, utilization and variability",
+    "question": "How much waiting am I creating by running near capacity with unpredictable work?",
+    "summary": "Work in process, throughput and time in the system are linked by Little's law when measured consistently. Under stochastic queueing assumptions, high utilization and variability can make waiting rise sharply; pooled capacity may reduce idle capacity alongside waiting work.",
+    "prerequisites": [
+      2,
+      16
+    ],
+    "resources": [
+      {
+        "title": "Queueing Systems: Lecture 1",
+        "source": "MIT OCW 1.203J, Fall 2006",
+        "section": "Course lecture 5; terminology, Little's law and M/M/1",
+        "url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/a9235f5e4e0aee12a55778e5beaf0ddb_lec5.pdf",
+        "verified": true
+      },
+      {
+        "title": "Queueing Systems: Lecture 4",
+        "source": "MIT OCW 1.203J, Fall 2006",
+        "section": "Course lecture 8; M/G/1 example and G/G/1 bounds",
+        "url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/aece89b6e5d7f4d41d10a3dd1fa503b0_lec8.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 1.203J, Fall 2006",
+        "problem_ref": "Problem Set 3, problem 1",
+        "problem_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/d17eb2c0cc4de23eef06fbe11262f9e1_ps3.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/f48e7ce03ef9381471aa24c4000d71a7_ps3sol.pdf",
+        "situation_based": true,
+        "notes": "Alvin and Bo at an M/M/1 queue. Source arithmetic typo in (a): its correct symbolic formula (1−0.4)exp(−2) equals about 0.08120, not the printed 0.2696.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 1.203J, Fall 2006",
+        "problem_ref": "Problem Set 3, problem 5",
+        "problem_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/d17eb2c0cc4de23eef06fbe11262f9e1_ps3.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/f48e7ce03ef9381471aa24c4000d71a7_ps3sol.pdf",
+        "situation_based": true,
+        "notes": "Car maintenance: one fast server versus two slower servers, including operating and waiting costs.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 1.203J, Fall 2006",
+        "problem_ref": "Problem Set 3, problem 6",
+        "problem_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/d17eb2c0cc4de23eef06fbe11262f9e1_ps3.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/f48e7ce03ef9381471aa24c4000d71a7_ps3sol.pdf",
+        "situation_based": true,
+        "notes": "Two-server loss system: infer busy-server occupancy and unobserved lost arrivals from admitted-customer and busy-time records. The source defines rho=lambda/mu as offered load, not per-server utilization.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 1.203J, Fall 2006",
+        "problem_ref": "Problem Set 4, problem 1, parts 1–4",
+        "problem_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/2887eb20a7aef9563076195ba83117a2_ps4.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/1-203j-logistical-and-transportation-planning-methods-fall-2006/548fae3f0b5eb3ca99929edb75c28949_ps4sol.pdf",
+        "situation_based": true,
+        "notes": "Compare service-time distributions and bounds for a queue. Treat the four related subparts as one item.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L17-S1: Two separate queues versus one pooled queue",
+        "problem_url": "substitute_exercises.html#L17-S1-problem",
+        "solution_url": "substitute_exercises.html#L17-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Four external problem selections plus an original pooling calculation. The source labels the course graduate-level, but these selections use basic probability and algebra rather than graduate proofs. Preserve the distinction between waiting time and total time, and between offered and admitted arrivals. The first solution contains an arithmetic typo, corrected in its notes."
+  },
+  {
+    "id": 18,
+    "name": "Constraints: bottlenecks, critical path and shadow prices",
+    "question": "Which constraint actually limits the outcome, and what is relaxing it worth?",
+    "summary": "A system's output is limited by the active combination of constraints, not by whichever resource looks busiest. A shadow price measures the local value of relaxation, and a binding constraint or critical task need not have positive stand-alone marginal value when other constraints tie.",
+    "prerequisites": [
+      9,
+      16
+    ],
+    "resources": [
+      {
+        "title": "Sensitivity analysis and shadow prices",
+        "source": "MIT OCW 15.053, Spring 2013",
+        "section": "Lecture 6; binding constraints, changes to right-hand sides and local shadow values",
+        "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/8fead641e2eee52dc7de15c68a9effab_MIT15_053S13_lec6.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 15.053, Spring 2013",
+        "problem_ref": "Problem Set 1, Group 1, problem 1(a–b,e)",
+        "problem_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/c9d7327e8e2be0bccf05d13532eec42b_MIT15_053S13_ps1-1sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/c9d7327e8e2be0bccf05d13532eec42b_MIT15_053S13_ps1-1sol.pdf",
+        "situation_based": true,
+        "notes": "Accessory-cover production: model capacity and demand. In part (b), the final production term should be y3/3000, not the printed y1/3000. Part (e) uses a different workbook scale; 5, 7.5, 8 correspond to thousands of covers, with objective 145000.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.053, Spring 2013",
+        "problem_ref": "Problem Set 2, Group 2, problem 2(a,c,d)",
+        "problem_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4c298694aaa1d95800620e6bc27304e6_MIT15_053S13_ps2-2sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4c298694aaa1d95800620e6bc27304e6_MIT15_053S13_ps2-2sol.pdf",
+        "situation_based": true,
+        "notes": "Tire production and the value of process capacity. Source prose overgeneralizes: binding constraints can have zero shadow price in degenerate cases.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 15.053, Spring 2013",
+        "problem_ref": "Problem Set 2, Group 2, problem 3(a–c)",
+        "problem_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4c298694aaa1d95800620e6bc27304e6_MIT15_053S13_ps2-2sol.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4c298694aaa1d95800620e6bc27304e6_MIT15_053S13_ps2-2sol.pdf",
+        "situation_based": true,
+        "notes": "Petroleum blending: binding availability/demand limits, product mix, and objective-coefficient sensitivity. Only (a–c) selected; later (d–e) have questionable extrapolation/arithmetic and are not assigned.",
+        "verified": true
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L18-S1: A critical path tie and the value of crashing tasks",
+        "problem_url": "substitute_exercises.html#L18-S1-problem",
+        "solution_url": "substitute_exercises.html#L18-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "Source warnings: the accessory LP has an index typo (corrected in notes); the tire answer wrongly generalizes that every binding constraint has nonzero shadow price. Only petroleum parts (a–c) are selected, excluding dubious later extrapolation. No suitable externally solved critical-path selection was verified, so the fourth exercise is original. Any LP optimizer may replace the historical Excel workflow."
+  },
+  {
+    "id": 19,
+    "name": "Fermi estimation, dimensional analysis and scaling",
+    "question": "Do the magnitudes make sense, and what changes at 10x?",
+    "summary": "Decompose an unfamiliar quantity into estimable factors, track units, and test limiting cases before trusting precise arithmetic. Dimensional and scaling arguments expose impossible formulas and distinguish relationships that grow linearly, quadratically or by other powers.",
+    "prerequisites": [],
+    "resources": [
+      {
+        "title": "Street-Fighting Mathematics",
+        "source": "Sanjoy Mahajan; free MIT OCW draft",
+        "section": "Chapter 1: Dimensions; Chapter 3: Lumping",
+        "url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/d937ad2ca4b7839a5b3bd92e30ee483e_MIT18_098IAP08_draft_text.pdf",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "MIT OCW 18.098, January IAP 2008",
+        "problem_ref": "Problem Set 1, problem 11: Kepler's third law",
+        "problem_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/b16749626b99d2523483cfa4040b1351_soln01.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/b16749626b99d2523483cfa4040b1351_soln01.pdf",
+        "situation_based": true,
+        "notes": "Infer orbital scaling from dimensions; statement and solution share a PDF.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.098, January IAP 2008",
+        "problem_ref": "Problem Set 2, problem 2: Navigation",
+        "problem_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/13cda967bd72612fb6c902f3747188ee_soln02.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/13cda967bd72612fb6c902f3747188ee_soln02.pdf",
+        "situation_based": true,
+        "notes": "Translate a clock error into a geographic error.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.098, January IAP 2008",
+        "problem_ref": "Problem Set 2, problem 3: Diaper market",
+        "problem_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/13cda967bd72612fb6c902f3747188ee_soln02.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/13cda967bd72612fb6c902f3747188ee_soln02.pdf",
+        "situation_based": true,
+        "notes": "Order-of-magnitude market sizing. Historical assumed prices and counts are not current market data.",
+        "verified": true
+      },
+      {
+        "source": "MIT OCW 18.098, January IAP 2008",
+        "problem_ref": "Problem Set 2, problem 5: Pendulum clock",
+        "problem_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/13cda967bd72612fb6c902f3747188ee_soln02.pdf",
+        "solution_url": "https://ocw.mit.edu/courses/18-098-street-fighting-mathematics-january-iap-2008/13cda967bd72612fb6c902f3747188ee_soln02.pdf",
+        "situation_based": true,
+        "notes": "Small amplitude-dependent changes accumulate into clock drift.",
+        "verified": true
+      }
+    ],
+    "gaps": "Four externally solved exercises verified. The diaper estimate is intentionally approximate and historical; its learning objective is decomposition and sensitivity, not an authoritative current market size."
+  },
+  {
+    "id": 20,
+    "name": "Selection versus drift",
+    "question": "Is this feature here because it was selected, or by chance and inherited constraint?",
+    "summary": "Frequency changes can reflect fitness differences, random sampling and historical constraints, often acting together. The persistence or apparent usefulness of a trait alone does not establish that natural selection produced it for its present function.",
+    "prerequisites": [
+      2,
+      8,
+      16
+    ],
+    "resources": [
+      {
+        "title": "Adaptive Evolution: Natural Selection",
+        "source": "Open Yale Courses EEB 122",
+        "section": "Lecture 3; selection, heritable variation and fitness",
+        "url": "https://oyc.yale.edu/ecology-and-evolutionary-biology/eeb-122/lecture-3",
+        "verified": true
+      },
+      {
+        "title": "Neutral Evolution: Genetic Drift",
+        "source": "Open Yale Courses EEB 122",
+        "section": "Lecture 4; random sampling and neutral change",
+        "url": "https://oyc.yale.edu/ecology-and-evolutionary-biology/eeb-122/lecture-4",
+        "verified": true
+      }
+    ],
+    "problems": [
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L20-S1: Population size and one-generation drift",
+        "problem_url": "substitute_exercises.html#L20-S1-problem",
+        "solution_url": "substitute_exercises.html#L20-S1-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L20-S2: A favored allele can still decline",
+        "problem_url": "substitute_exercises.html#L20-S2-problem",
+        "solution_url": "substitute_exercises.html#L20-S2-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L20-S3: Neutral fixation across replicate populations",
+        "problem_url": "substitute_exercises.html#L20-S3-problem",
+        "solution_url": "substitute_exercises.html#L20-S3-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      },
+      {
+        "source": "Original substitute; not an externally sourced exercise",
+        "problem_ref": "L20-S4: A fitness valley and inherited starting points",
+        "problem_url": "substitute_exercises.html#L20-S4-problem",
+        "solution_url": "substitute_exercises.html#L20-S4-solution",
+        "situation_based": true,
+        "notes": "Original exercise and worked solution in the accompanying bundle. verified=false denotes no independent source verification. ",
+        "verified": false
+      }
+    ],
+    "gaps": "No suitable four-question public problem set with verified solutions was established for these Yale lectures. All four practice entries are explicitly original substitutes, with worked answers and reproducible checks; none is presented as a Yale problem number. The models are deliberately simplified and do not identify selection from real genomic data. The final exercise is an optional stretch: a fitness-valley model with a supplied finite-population fixation formula."
+  }
+]

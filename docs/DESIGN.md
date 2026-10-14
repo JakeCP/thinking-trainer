@@ -39,8 +39,10 @@ lens            id (pk, from lenses.json), name, question, summary,
 source_doc      id, url UNIQUE, kind (pdf|html), sha256, fetched_at, http_status,
                 raw_path (cached bytes on disk), text_layer, has_text_layer, error
 
-problem         id, lens_id → lens, problem_doc_id → source_doc, solution_doc_id → source_doc,
+problem         id, problem_doc_id → source_doc, solution_doc_id → source_doc,
                 source_label        -- "18.05 PS4 #3"; hidden until answered
+                kind (exercise | lab | worked_example | original),
+                situation_based     -- from the curriculum file
                 statement_original  -- as extracted, never edited
                 statement_served    -- nullable manual override (e.g. redacting a give-away phrase)
                 solution,
@@ -48,6 +50,10 @@ problem         id, lens_id → lens, problem_doc_id → source_doc, solution_do
                 flags JSON [{code, detail}],
                 coverage            -- verification score, see §3
                 extraction_call_id → llm_call, reviewed_at
+
+problem_lens    problem_id, lens_id, problem_ref (as written in the curriculum file),
+                parts (e.g. "a–c"), curator_notes
+                -- many-to-many: Yale ECON 159 final Q3 and Q5 are each listed under two lenses
 
 card            problem_id (pk) → problem, due, stability, difficulty, state,
                 step, last_review   -- FSRS state; `due` is indexed
@@ -87,10 +93,17 @@ Notes:
 
 ## 3. Feature 1: ingest pipeline
 
-`uv run python -m app.ingest lenses.json [--lens ID] [--refetch]`. Runs are idempotent and resumable.
+`uv run python -m app.ingest content/curriculum.json [--lens ID] [--refetch]`. Runs are idempotent and resumable.
 
+What the curriculum file implies (91 entries):
+- **60 exercises** from 29 document pairs (37 URLs). 54 entries use the same URL for problem and solution, because the statement and solution are in one PDF.
+- **9 labs and 2 worked examples** (ISLP labs, Think Bayes, 15.010 slides). These are real sources, but the "problem" is "recreate this lab", which isn't something you answer in free text on a phone.
+- **20 "original substitutes"** pointing at `substitute_exercises.html`, which wasn't attached. See Q5.
+- **Kind** is inferred from markers in the file: `source` beginning "Original substitute", and notes containing "WORKED-LAB SUBSTITUTE" or "WORKED-EXAMPLE SUBSTITUTE". The inference is logged. An explicit `kind` field in the JSON overrides it.
+
+Steps:
 1. **Fetch** each URL once and cache the bytes by sha256. A fetch failure (404, timeout, paywall HTML where a PDF was expected) becomes a flag on the problem. Nothing is retried silently.
-2. **Extract** with one Claude call per problem/solution pair (`prompts/extract_problems.md`). Claude transcribes; it does not solve, complete, or fix anything. It returns a list of problems, each with its label, statement, matched solution, and self-reported issues.
+2. **Extract** with one Claude call per *document pair*, carrying every curriculum entry that points at it (`prompts/extract_problems.md`). The Yale final, for example, holds 7 entries across 5 lenses in one call. This is cheaper, keeps shared setup consistent, and dedupes cross-listed questions into a single problem with several lens tags. Claude transcribes only; it does not solve, complete, or fix anything. It returns each targeted problem with its label, the selected parts plus any shared setup they depend on, the matched solution, and self-reported issues.
 3. **Verify mechanically**, with no LLM involved. Each check that trips becomes a flag and sends the problem to `needs_review`:
    - `low_coverage`: the share of alphabetic words in Claude's transcription that also appear in the PDF's text layer is below 0.92. This catches paraphrase and invented text. It deliberately ignores math tokens, which the text layer mangles. **Limit:** it catches added or reworded text, not *dropped* sentences. Omissions are only partly covered (by the label-count check below), which is why the review screen links the source.
    - `no_text_layer`: a scanned PDF. Nothing can be verified, so it always goes to review.
@@ -137,4 +150,8 @@ tests/      fixture PDFs + recorded LLM responses; tests never hit the network
 - **Q1. Per-problem FSRS.** I'll build what you asked for, but here is my concern. Once you've seen a problem's solution and its lens, the next review of that problem tests whether you remember its answer, not whether you recognise the lens. With a bank of perhaps 60–100 problems, that happens quickly. My view is that the problem bank should train *execution* (can I run the tool) and the drills should train *recognition* (do I notice when it applies). Under that framing, per-problem FSRS is fine. The alternative is per-lens FSRS that serves a different problem for the lens each time, which stretches a small bank further. Your call.
 - **Q2. Bare answers.** The grading prompt currently caps a correct final answer with no reasoning at `partially_correct`, because there's no reasoning to judge. Keep that, or grade bare correct answers as `correct`?
 - **Q3. Confidence before reveal.** This would add one optional field: "how sure are you that you're right?" (0–100), entered before the grade. It gives a calibration chart from every problem and drill, not just from forecasts, and the gap between confidence and grade is your overconfidence by lens. It's cheap and I think worth it.
-- **Q4. lenses.json** did not come through with your message: the repo is empty and there's nothing in the uploads folder. I need it to see whether problem URLs point at whole problem sets or specific problems, and whether they're PDF or HTML.
+- **Q4. Curriculum file.** Answered: `content/curriculum.json` (the attached file) is canonical. The two other versions pasted inline in the same message differ from it and from each other; they are ignored.
+- **Q5. "Original substitute" exercises (20 of 91).** Who wrote `substitute_exercises.html`? If an LLM wrote it, it falls under your own rule against LLM-generated problems, so my default is to exclude them. Lens 20 would then have no problems in the bank, lens 12 would have one, and the drills would carry those lenses. If you wrote or checked them, they go in with `kind = original` and a visible badge. Either way, the bundle wasn't attached.
+- **Q6. Labs and worked examples (11 of 91).** My default is to keep them out of the phone queue and list them on a per-lens "desk work" page with a done checkbox. That leaves lenses 6 and 7 with no bank problems.
+- **Curator notes as errata.** Several notes correct the official key, for example "(1−0.4)e^{−2} ≈ 0.0812, not the printed 0.2696" (1.203J PS3 #1) or "should be y3/3000, not y1/3000" (15.053). The notes are passed to the grader as `curator_notes`, labelled as possibly wrong themselves, and shown to you next to the official solution.
+- **Course style leaks the lens.** These problems come from about 8 courses, and each course maps to one or two lenses: 15.053 linear programs are shadow prices, 1.203J is queues, 18.098 is Fermi estimation. The notation alone will often give away the lens, the same way a chapter title would. That is another reason to treat the bank as training for *using* each tool and the drills as training for *noticing* (Q1).
