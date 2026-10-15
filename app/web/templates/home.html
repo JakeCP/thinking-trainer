@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block main %}
+{% if not api_key_set %}<p class="banner"><code>ANTHROPIC_API_KEY</code> isn't set, so grading will fail. Set it in the environment and restart.</p>{% endif %}
+<section class="card">
+  {% if pending %}
+    <p>You have a graded answer waiting for your rating.</p>
+    <a class="button primary" href="/attempts/{{ pending.id }}">Rate it</a>
+  {% else %}
+    <p class="big">{{ counts.due }} due · {{ counts.new_available }} new today</p>
+    {% if counts.due or counts.new_available %}
+      <a class="button primary" href="/practice">Start</a>
+    {% else %}
+      <p class="muted">Nothing to do right now.</p>
+    {% endif %}
+  {% endif %}
+</section>
+<section class="card">
+  <h2>Problem bank</h2>
+  <ul class="plain">
+    <li>{{ by_status.get('ok', 0) }} in rotation ({{ counts.unseen }} not yet seen)</li>
+    <li><a href="/review">{{ by_status.get('needs_review', 0) }} waiting for your review</a></li>
+    <li><a href="/desk">{{ by_status.get('desk', 0) }} desk items</a> (labs and worked examples)</li>
+    <li><a href="/review?status=rejected">{{ by_status.get('rejected', 0) }} rejected</a> · <a href="/review?status=excluded">{{ by_status.get('excluded', 0) }} excluded</a></li>
+  </ul>
+  {% if not by_status %}
+    <p class="muted">Empty. Run <code>uv run python -m app.ingest</code> to build the bank.</p>
+  {% endif %}
+</section>
+{% endblock %}

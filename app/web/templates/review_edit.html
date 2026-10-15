@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="card">
+  <p><b>{{ problem.source }}</b> · {{ problem.source_label }} {% if problem.parts %}· parts {{ problem.parts }}{% endif %}</p>
+  <p class="muted">{{ problem.kind }} · status {{ problem.status }}{% if problem.coverage is not none %} · coverage {{ '%.0f' % (problem.coverage * 100) }}%{% endif %}</p>
+  <p><a href="{{ problem.problem_url }}" target="_blank" rel="noopener">problem source</a>{% if problem.solution_url != problem.problem_url %} · <a href="{{ problem.solution_url }}" target="_blank" rel="noopener">solution source</a>{% endif %}</p>
+  {% for pl in problem.lenses %}
+    <p class="muted">Lens {{ pl.lens_id }}: {{ pl.problem_ref }}{% if pl.curator_notes %}<br>Note: {{ pl.curator_notes }}{% endif %}</p>
+  {% endfor %}
+  {% if problem.flags %}<ul class="flags">{% for f in problem.flags %}<li><code>{{ f.code }}</code> {{ f.detail }}</li>{% endfor %}</ul>{% endif %}
+</section>
+
+<form method="post" class="card stack">
+  <label for="st">Statement as served <span class="muted">(edit to fix or redact; the extracted original is kept below)</span></label>
+  <textarea id="st" name="statement_served" rows="12" data-preview="st-preview">{{ problem.statement }}</textarea>
+  <div id="st-preview" class="preview math"></div>
+  <label for="sol">Solution</label>
+  <textarea id="sol" name="solution" rows="12" data-preview="sol-preview">{{ problem.solution }}</textarea>
+  <div id="sol-preview" class="preview math"></div>
+  <div class="row">
+    {% if problem.status in ('ok', 'rejected') %}
+      <button name="action" value="reopen">Reopen</button>
+    {% endif %}
+    <button name="action" value="save">Save</button>
+    <button name="action" value="reject" class="danger">Reject</button>
+    <button name="action" value="approve" class="primary">Approve</button>
+  </div>
+</form>
+
+{% if problem.statement_served is not none %}
+<details class="card">
+  <summary><h2>Extracted original</h2></summary>
+  <pre class="raw">{{ problem.statement_original }}</pre>
+</details>
+{% endif %}
+{% endblock %}

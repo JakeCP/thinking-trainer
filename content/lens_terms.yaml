@@ -1,0 +1,27 @@
+# Phrases that give a lens away when they appear in a problem statement or a
+# generated situation. Ingest flags problems containing them (`names_lens`) so
+# you can write a redacted statement; situation generation will ban them.
+#
+# Match is case-insensitive substring, so "confound" catches "confounding".
+# Keep these to names of the technique, not ordinary words a problem would
+# use anyway ("prior" or "average" would flag nearly everything).
+1: [bayes, base rate, base-rate, likelihood ratio, prosecutor's fallacy, signal detection]
+2: [law of small numbers, law of large numbers, central limit theorem, sampling noise, sampling error]
+3: [regression to the mean, regression toward the mean, regress to the mean, shrinkage, sophomore slump]
+4: [selection bias, selection effect, survivorship, collider, berkson]
+5: [confound, simpson's paradox, simpson paradox, causal diagram, back-door, backdoor, dag]
+6: [multiple comparisons, multiple testing, bonferroni, false discovery rate, family-wise, forking paths, p-hacking]
+7: [overfit, cross-validation, cross validation, out-of-sample, held-out, test error]
+8: [jensen, fat tail, heavy tail, gambler's ruin, ruin, kelly]
+9: [opportunity cost, sunk cost, marginal cost, marginal benefit, marginal utility, diminishing returns]
+10: [comparative advantage, absolute advantage]
+11: [value of information, value of perfect information, evpi, explore, exploit, bandit]
+12: [principal-agent, principal agent, moral hazard, goodhart, multitask]
+13: [adverse selection, signaling, signalling, screening, asymmetric information, lemons, winner's curse]
+14: [nash equilibrium, subgame perfect, backward induction, commitment, repeated game, tax incidence, prisoner's dilemma]
+15: [externality, externalities, public good, free rider, free-rider, tragedy of the commons, pigouvian, collective action]
+16: [stock and flow, stocks and flows, feedback loop, doubling time, exponential growth, graphical integration]
+17: [little's law, queueing, queuing, m/m/1, m/m/2, utilization, pooling]
+18: [bottleneck, critical path, shadow price, binding constraint, sensitivity analysis]
+19: [fermi, dimensional analysis, order of magnitude, order-of-magnitude, scaling law]
+20: [genetic drift, natural selection, fixation probability, neutral allele]

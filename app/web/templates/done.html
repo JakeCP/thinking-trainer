@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="card">
+  <p class="big">All done for now.</p>
+  <p class="muted">{{ counts.unseen }} unseen problem{{ '' if counts.unseen == 1 else 's' }} left in the bank; new ones are released a few per day.</p>
+  <a class="button" href="/">Home</a>
+</section>
+{% endblock %}

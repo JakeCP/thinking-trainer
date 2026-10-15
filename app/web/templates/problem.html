@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block main %}
+<article class="card math">
+  {# No lens, course or problem-set label here: that's the point. #}
+  {{ problem.statement | md }}
+</article>
+<form method="post" action="/problems/{{ problem.id }}/attempt" enctype="multipart/form-data" class="card stack" data-busy="Submitting…">
+  <input type="hidden" name="shown_at" value="{{ shown_at }}">
+  <label for="answer">Your answer <span class="muted">(plain text or LaTeX between $…$)</span></label>
+  <textarea id="answer" name="answer" rows="8" data-preview="answer-preview" autocapitalize="off" spellcheck="false"></textarea>
+  <div id="answer-preview" class="preview math" aria-live="polite"></div>
+  <label>Photo of handwritten work <span class="muted">(optional)</span>
+    <input type="file" name="photos" accept="image/*" multiple>
+  </label>
+  <fieldset class="confidence">
+    <legend>How sure are you that you're right? <span class="muted">(optional)</span></legend>
+    <div class="chips">
+      {% for v in [10, 30, 50, 70, 90, 99] %}
+        <label class="chip"><input type="radio" name="confidence" value="{{ v }}"><span>{{ v }}%</span></label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  <button class="primary">Submit for grading</button>
+</form>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="card verdict verdict-{{ attempt.verdict or 'none' }}">
+  {% if attempt.verdict %}
+    <p class="big">{{ attempt.verdict.replace('_', ' ') | capitalize }}</p>
+    {% if attempt.feedback %}<div class="math">{{ attempt.feedback | md }}</div>{% endif %}
+    {% if attempt.grade and attempt.grade.parts %}
+      <ul class="plain parts">{% for p in attempt.grade.parts %}<li><b>{{ p.label }}</b> {{ p.verdict.replace('_', ' ') }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if attempt.grade and attempt.grade.alternative_method %}<p class="muted">You used a different valid method from the official solution.</p>{% endif %}
+    {% if attempt.solution_concern %}<p class="warn"><b>Possible problem with the official solution:</b> {{ attempt.solution_concern }}</p>{% endif %}
+  {% elif attempt.grading_error %}
+    <p class="big">Grading failed</p>
+    <p class="error">{{ attempt.grading_error }}</p>
+    <form method="post" action="/attempts/{{ attempt.id }}/grade" data-busy="Grading…"><button>Try again</button></form>
+    <p class="muted">Or rate it yourself below.</p>
+  {% else %}
+    <form method="post" action="/attempts/{{ attempt.id }}/grade" data-busy="Grading…"><button class="primary">Grade my answer</button></form>
+  {% endif %}
+  {% if attempt.confidence is not none %}<p class="muted">You were {{ attempt.confidence }}% sure.</p>{% endif %}
+</section>
+
+{% if attempt.rated_at is none %}
+<section class="card">
+  <p>How did that go?</p>
+  <form method="post" action="/attempts/{{ attempt.id }}/rate" class="ratings">
+    {% for r in [1, 2, 3, 4] %}
+      <button name="rating" value="{{ r }}" class="{{ 'primary' if r == suggested else '' }}">{{ rating_labels[r] }}</button>
+    {% endfor %}
+  </form>
+  {% if suggested %}<p class="muted">Highlighted: the rating the grade suggests. It's your call.</p>{% endif %}
+</section>
+{% else %}
+<section class="card"><a class="button primary" href="/practice">Next</a></section>
+{% endif %}
+
+<section class="card">
+  <h2>Lens</h2>
+  {% for pl in lenses %}
+    <p><b>{{ pl.lens.name }}</b><br><span class="muted">{{ pl.lens.question }}</span></p>
+  {% endfor %}
+  <p class="muted">{{ problem.source }} · {{ problem.source_label }} · <a href="{{ problem.solution_url }}" target="_blank" rel="noopener">source</a></p>
+  {% for pl in lenses if pl.curator_notes %}<p class="note">Curator's note: {{ pl.curator_notes }}</p>{% endfor %}
+</section>
+
+<details class="card" open>
+  <summary><h2>Official solution</h2></summary>
+  <div class="math">{{ problem.solution | md }}</div>
+</details>
+
+<details class="card">
+  <summary><h2>Your answer</h2></summary>
+  <div class="math">{{ attempt.answer_text | md }}</div>
+  {% for name in attempt.photo_paths %}<img class="photo" src="/uploads/{{ name }}" alt="your handwritten work">{% endfor %}
+</details>
+
+<details class="card">
+  <summary><h2>Problem</h2></summary>
+  <div class="math">{{ problem.statement | md }}</div>
+</details>
+{% endblock %}

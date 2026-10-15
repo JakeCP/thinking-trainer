@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="card">
+  <form method="post" action="/attempts/{{ attempt.id }}/grade" id="grade-form" data-autosubmit data-busy="Grading…">
+    <p class="big" data-busy-text>Ready to grade.</p>
+    <p class="muted">Grading usually takes 20–60 seconds.</p>
+    <button class="primary">Grade my answer</button>
+  </form>
+</section>
+{% endblock %}

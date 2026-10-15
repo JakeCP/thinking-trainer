@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Thinking Trainer{% endblock %}</title>
+  <link rel="stylesheet" href="/static/katex/katex.min.css">
+  <link rel="stylesheet" href="/static/app.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22%3E%3Ccircle cx=%228%22 cy=%228%22 r=%226%22 fill=%22none%22 stroke=%22%232f5d8a%22 stroke-width=%222.5%22/%3E%3C/svg%3E">
+  <script defer src="/static/katex/katex.min.js"></script>
+  <script defer src="/static/katex/contrib/auto-render.min.js"></script>
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/">Thinking Trainer</a>
+    <nav>
+      <a href="/practice">Practice</a>
+      <a href="/review">Review{% if review_count %} <span class="pill">{{ review_count }}</span>{% endif %}</a>
+      <a href="/desk">Desk</a>
+      {% if auth %}<form method="post" action="/logout" class="inline"><button class="link">Log out</button></form>{% endif %}
+    </nav>
+  </header>
+  <main>{% block main %}{% endblock %}</main>
+</body>
+</html>

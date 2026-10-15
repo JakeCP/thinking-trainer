@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block main %}
+<nav class="tabs">
+  {% for s, label in [('needs_review', 'Needs review'), ('ok', 'In rotation'), ('rejected', 'Rejected'), ('excluded', 'Excluded')] %}
+    <a href="/review?status={{ s }}" class="{{ 'active' if s == status else '' }}">{{ label }} ({{ counts.get(s, 0) }})</a>
+  {% endfor %}
+</nav>
+{% if not problems %}<p class="muted">Nothing here.</p>{% endif %}
+<ul class="plain list">
+  {% for p in problems %}
+    <li class="card">
+      <a href="/review/{{ p.id }}"><b>{{ p.source }}</b> · {{ p.source_label }}</a>
+      <div class="muted">{{ p.kind }} · lens {% for pl in p.lenses %}{{ pl.lens_id }}{{ ', ' if not loop.last }}{% endfor %}{% if p.coverage is not none %} · coverage {{ '%.0f' % (p.coverage * 100) }}%{% endif %}</div>
+      {% if p.flags %}<ul class="flags">{% for f in p.flags %}<li><code>{{ f.code }}</code> {{ f.detail }}</li>{% endfor %}</ul>{% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

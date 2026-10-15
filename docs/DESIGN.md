@@ -1,15 +1,15 @@
 # Thinking Trainer — design (draft for review)
 
-Status: proposal. Nothing is built yet. Prompt drafts are in `prompts/`.
+Status: feature 1 (problem bank) is built; features 2–4 are still the plan below. Prompts are in `prompts/`.
 
 ## 1. Stack
 
 | Layer | Choice | Why |
 |---|---|---|
 | Language | Python 3.12+, managed with `uv` | Best PDF tooling, the reference FSRS implementation (`fsrs` on PyPI), and the official `anthropic` SDK. One language end to end. |
-| Web | FastAPI + Jinja2 templates, with htmx for the few partial updates (submitting an answer, then showing the grade) | Server-rendered forms are the right shape for this app: no SPA, no build step, no `node_modules`. htmx is a single 14 KB script. |
+| Web | FastAPI + Jinja2 templates, plain forms and redirects, about 60 lines of vanilla JS | Server-rendered forms are the right shape for this app: no SPA, no build step, no `node_modules`. (htmx was in the proposal; plain forms turned out to cover everything.) |
 | DB | SQLite (WAL mode) through SQLAlchemy 2.0, with Alembic migrations | Single user, single file, trivial backups. Alembic means schema changes stay boring. |
-| Math | KaTeX from a CDN | Renders problem and solution LaTeX, and gives a live preview of your answer while you type. |
+| Math | KaTeX 0.16.11, vendored in `app/web/static/katex` (woff2 fonts only, 612 KB) | Renders problem and solution LaTeX, and gives a live preview of your answer while you type. Vendored so the app has no third-party runtime dependency. |
 | Charts | Server-rendered inline SVG; the confusion matrix is an HTML table with shaded cells | A calibration plot has about 10 points and doesn't need a chart library. |
 | LLM | `anthropic` SDK with structured outputs (Pydantic schemas) | Grades come back as typed JSON, not text that has to be parsed. |
 | PDFs | `pypdf` for the text layer (used only for *verification*); Claude reads the PDF itself for extraction | OCW problem sets are LaTeX-typeset, and text-layer extraction mangles math. Claude reading the page is better at transcription. The text layer is what keeps it honest (§3). |
@@ -96,7 +96,7 @@ Notes:
 `uv run python -m app.ingest content/curriculum.json [--lens ID] [--refetch]`. Runs are idempotent and resumable.
 
 What the curriculum file implies (91 entries):
-- **60 exercises** from 29 document pairs (37 URLs). 54 entries use the same URL for problem and solution, because the statement and solution are in one PDF.
+- **60 exercises** from 24 document pairs (32 URLs). 43 of them use the same URL for problem and solution, because the statement and solution are in one PDF.
 - **9 labs and 2 worked examples** (ISLP labs, Think Bayes, 15.010 slides). These are real sources, but the "problem" is "recreate this lab", which isn't something you answer in free text on a phone.
 - **20 "original substitutes"** pointing at `substitute_exercises.html`, which wasn't attached. See Q5.
 - **Kind** is inferred from markers in the file: `source` beginning "Original substitute", and notes containing "WORKED-LAB SUBSTITUTE" or "WORKED-EXAMPLE SUBSTITUTE". The inference is logged. An explicit `kind` field in the JSON overrides it.
@@ -118,7 +118,8 @@ Generated content never enters `problem`. The two tables share no code path for 
 ### Serving and scheduling
 - A session builds a queue of due cards, plus up to N new cards per day (default 3), ordered so that no two consecutive problems share a lens when that can be avoided.
 - The problem page shows the statement only: no lens, course, or problem-set label. After you submit, you see the grade and feedback, then the official solution, lens, and source link, then the 1–4 rating buttons.
-- FSRS state is per problem, as you asked. See Q1 for my concern about this.
+- FSRS state is per problem (Q1). FSRS's default 1- and 10-minute learning steps are turned off: they suit flashcards, but a problem whose solution you've just read shouldn't come back within minutes. The first review is always a day or more away.
+- A graded attempt must be rated before the next problem is served, so no rating is ever lost.
 
 ## 4. Feature 2: recognition drills (outline only; built after feature 1)
 
@@ -147,11 +148,11 @@ tests/      fixture PDFs + recorded LLM responses; tests never hit the network
 
 ## 7. Open questions
 
-- **Q1. Per-problem FSRS.** I'll build what you asked for, but here is my concern. Once you've seen a problem's solution and its lens, the next review of that problem tests whether you remember its answer, not whether you recognise the lens. With a bank of perhaps 60–100 problems, that happens quickly. My view is that the problem bank should train *execution* (can I run the tool) and the drills should train *recognition* (do I notice when it applies). Under that framing, per-problem FSRS is fine. The alternative is per-lens FSRS that serves a different problem for the lens each time, which stretches a small bank further. Your call.
-- **Q2. Bare answers.** The grading prompt currently caps a correct final answer with no reasoning at `partially_correct`, because there's no reasoning to judge. Keep that, or grade bare correct answers as `correct`?
-- **Q3. Confidence before reveal.** This would add one optional field: "how sure are you that you're right?" (0–100), entered before the grade. It gives a calibration chart from every problem and drill, not just from forecasts, and the gap between confidence and grade is your overconfidence by lens. It's cheap and I think worth it.
+- **Q1. Per-problem FSRS.** Decided: per problem. The bank trains *using* each tool, and the drills train *noticing* it.
+- **Q2. Bare answers.** Decided: a correct final answer with no reasoning is `partially_correct`.
+- **Q3. Confidence before reveal.** Decided: yes, an optional 0–100 field on every attempt.
 - **Q4. Curriculum file.** Answered: `content/curriculum.json` (the attached file) is canonical. The two other versions pasted inline in the same message differ from it and from each other; they are ignored.
-- **Q5. "Original substitute" exercises (20 of 91).** Who wrote `substitute_exercises.html`? If an LLM wrote it, it falls under your own rule against LLM-generated problems, so my default is to exclude them. Lens 20 would then have no problems in the bank, lens 12 would have one, and the drills would carry those lenses. If you wrote or checked them, they go in with `kind = original` and a visible badge. Either way, the bundle wasn't attached.
-- **Q6. Labs and worked examples (11 of 91).** My default is to keep them out of the phone queue and list them on a per-lens "desk work" page with a done checkbox. That leaves lenses 6 and 7 with no bank problems.
+- **Q5. "Original substitute" exercises (20 of 91).** You found them online. The curriculum file itself calls them "not an externally sourced exercise", so their origin is unclear. They are kept out of rotation by default (`excluded`). With `--originals-dir`, each one is loaded from the bundle and waits in review with an `original` flag until you approve it.
+- **Q6. Labs and worked examples (11 of 91).** Decided: kept out of the phone queue and listed on the `/desk` page.
 - **Curator notes as errata.** Several notes correct the official key, for example "(1−0.4)e^{−2} ≈ 0.0812, not the printed 0.2696" (1.203J PS3 #1) or "should be y3/3000, not y1/3000" (15.053). The notes are passed to the grader as `curator_notes`, labelled as possibly wrong themselves, and shown to you next to the official solution.
 - **Course style leaks the lens.** These problems come from about 8 courses, and each course maps to one or two lenses: 15.053 linear programs are shadow prices, 1.203J is queues, 18.098 is Fermi estimation. The notation alone will often give away the lens, the same way a chapter title would. That is another reason to treat the bank as training for *using* each tool and the drills as training for *noticing* (Q1).

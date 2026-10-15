@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block main %}
+<p class="muted">Labs and worked examples: things to do at a desk with code, not on a phone.</p>
+{% for lens in lenses if by_lens.get(lens.id) %}
+  <section class="card">
+    <h2>{{ lens.name }}</h2>
+    <ul class="plain list">
+      {% for item, pl in by_lens[lens.id] %}
+        <li id="item-{{ item.id }}" class="{{ 'done' if item.desk_done_at else '' }}">
+          <form method="post" action="/desk/{{ item.id }}" class="inline">
+            <button class="check" aria-label="toggle done">{{ '✓' if item.desk_done_at else '○' }}</button>
+          </form>
+          <a href="{{ item.problem_url }}" target="_blank" rel="noopener">{{ pl.problem_ref }}</a>
+          <div class="muted">{{ item.source }}{% if pl.curator_notes %} · {{ pl.curator_notes }}{% endif %}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% else %}
+  <p class="muted">No desk items yet. Run the ingest.</p>
+{% endfor %}
+{% endblock %}
