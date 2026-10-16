@@ -38,7 +38,7 @@ def settings(tmp_path, monkeypatch):
     monkeypatch.setenv("DATA_DIR", str(tmp_path / "data"))
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.delenv("APP_PASSWORD", raising=False)
-    s = load_settings()
+    s = replace(load_settings(), llm_enabled=True)  # most tests run with the (fake) grader on
     s.data_dir.mkdir(parents=True)
     return s
 

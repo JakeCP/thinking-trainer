@@ -154,3 +154,48 @@ def test_html_saying_pdf_is_a_fetch_failure(db, llm, transport, settings, curric
     doc = db.scalar(select(SourceDoc).where(SourceDoc.url == PSET))
     assert doc.error == "expected a PDF, got HTML"
     assert all(p.flags[0]["code"] == "fetch_failed" for p in by_status(db)["needs_review"])
+
+
+# --- without an API key ------------------------------------------------------
+
+
+def test_without_key_fetches_only_and_waits_for_you(db, llm, transport, settings, curriculum, mock_http, served_pdf):
+    report = ingest(db, llm, settings, curriculum, mock_http, extract_enabled=False)
+    review = [p for p in by_status(db)["needs_review"] if p.kind == "exercise"]
+    assert len(review) == 2 and report.pairs_fetched_only == 1 and transport.sent == []
+    for p in review:
+        assert p.flags[0]["code"] == "not_extracted"
+        assert "longest run of heads" in p.problem_doc.text_layer  # there to copy from at /review
+
+
+def test_hand_entered_problems_survive_a_later_extraction(db, llm, transport, settings, curriculum, mock_http, served_pdf):
+    from datetime import datetime, timezone
+
+    ingest(db, llm, settings, curriculum, mock_http, extract_enabled=False)
+    mine = db.scalar(select(Problem).where(Problem.ingest_key == "target:2:0"))
+    mine.statement_served, mine.solution, mine.status = "My copy of problem 1.", "My copy of solution 1.", "ok"
+    mine.reviewed_at = datetime.now(timezone.utc)
+    half_typed = db.scalar(select(Problem).where(Problem.ingest_key == "target:2:1"))
+    half_typed.statement_served = "Started typing problem 2"
+    db.commit()
+
+    # Later, with a key: only the entry you haven't approved is sent for extraction.
+    transport.queue("extract_problems", extraction(problem("2:1", "Problem 2", P2, S2)))
+    ingest(db, llm, settings, curriculum, mock_http)
+    targets_sent = transport.sent[0]["content"][-1]["text"]
+    assert '"2:1"' in targets_sent and '"2:0"' not in targets_sent
+
+    db.expire_all()
+    assert db.get(Problem, mine.id).statement == "My copy of problem 1."
+    assert db.get(Problem, mine.id).status == "ok"
+    kept = db.get(Problem, half_typed.id)  # not deleted: it has your typing in it
+    assert kept is not None and kept.flags[-1]["code"] == "superseded"
+    assert db.scalar(select(Problem).where(Problem.source_label == "Problem 2", Problem.ingest_key.startswith("pair:"))).status == "ok"
+
+
+def test_untouched_placeholders_are_replaced_by_extraction(db, llm, transport, settings, curriculum, mock_http, served_pdf):
+    ingest(db, llm, settings, curriculum, mock_http, extract_enabled=False)
+    transport.queue("extract_problems", extraction(problem("2:0", "Problem 1", P1, S1), problem("2:1", "Problem 2", P2, S2)))
+    ingest(db, llm, settings, curriculum, mock_http)
+    exercises = [p for p in db.scalars(select(Problem)) if p.kind == "exercise"]
+    assert sorted(p.ingest_key.split("|")[-1] for p in exercises) == ["problem 1", "problem 2"]

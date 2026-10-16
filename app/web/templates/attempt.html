@@ -1,8 +1,58 @@
 {% extends "base.html" %}
+
+{% macro lens_card() %}
+<section class="card">
+  <h2>Lens</h2>
+  {% for pl in lenses %}
+    <p><b>{{ pl.lens.name }}</b><br><span class="muted">{{ pl.lens.question }}</span></p>
+  {% endfor %}
+  <p class="muted">{{ problem.source }} · {{ problem.source_label }} · <a href="{{ problem.solution_url }}" target="_blank" rel="noopener">source</a></p>
+  {% for pl in lenses if pl.curator_notes %}<p class="note">Curator's note: {{ pl.curator_notes }}</p>{% endfor %}
+</section>
+{% endmacro %}
+
+{% macro solution_card(open) %}
+<details class="card" {{ 'open' if open }}>
+  <summary><h2>Official solution</h2></summary>
+  <div class="math">{{ problem.solution | md }}</div>
+</details>
+{% endmacro %}
+
+{% macro answer_card(open) %}
+<details class="card" {{ 'open' if open }}>
+  <summary><h2>Your answer</h2></summary>
+  <div class="math">{{ attempt.answer_text | md }}</div>
+  {% for name in attempt.photo_paths %}<img class="photo" src="/uploads/{{ name }}" alt="your handwritten work">{% endfor %}
+</details>
+{% endmacro %}
+
+{% macro problem_card() %}
+<details class="card">
+  <summary><h2>Problem</h2></summary>
+  <div class="math">{{ problem.statement | md }}</div>
+</details>
+{% endmacro %}
+
 {% block main %}
+{% if self_grading %}
+  {# No grader: put your answer next to the official one, then ask for your verdict. #}
+  {{ answer_card(true) }}
+  {{ solution_card(true) }}
+  <section class="card">
+    <p>Compare your answer with the official solution. Judge the reasoning, not just the final number. Were you right?</p>
+    <form method="post" action="/attempts/{{ attempt.id }}/self-grade" class="ratings three">
+      <button name="verdict" value="correct">Right</button>
+      <button name="verdict" value="partially_correct">Partly</button>
+      <button name="verdict" value="incorrect">Wrong</button>
+    </form>
+    {% if attempt.confidence is not none %}<p class="muted">You were {{ attempt.confidence }}% sure.</p>{% endif %}
+  </section>
+  {{ lens_card() }}
+  {{ problem_card() }}
+{% else %}
 <section class="card verdict verdict-{{ attempt.verdict or 'none' }}">
   {% if attempt.verdict %}
-    <p class="big">{{ attempt.verdict.replace('_', ' ') | capitalize }}</p>
+    <p class="big">{{ attempt.verdict.replace('_', ' ') | capitalize }}{% if attempt.verdict_source == 'self' %} <span class="muted">(your call)</span>{% endif %}</p>
     {% if attempt.feedback %}<div class="math">{{ attempt.feedback | md }}</div>{% endif %}
     {% if attempt.grade and attempt.grade.parts %}
       <ul class="plain parts">{% for p in attempt.grade.parts %}<li><b>{{ p.label }}</b> {{ p.verdict.replace('_', ' ') }}</li>{% endfor %}</ul>
@@ -12,7 +62,7 @@
   {% elif attempt.grading_error %}
     <p class="big">Grading failed</p>
     <p class="error">{{ attempt.grading_error }}</p>
-    <form method="post" action="/attempts/{{ attempt.id }}/grade" data-busy="Grading…"><button>Try again</button></form>
+    {% if llm_enabled %}<form method="post" action="/attempts/{{ attempt.id }}/grade" data-busy="Grading…"><button>Try again</button></form>{% endif %}
     <p class="muted">Or rate it yourself below.</p>
   {% else %}
     <form method="post" action="/attempts/{{ attempt.id }}/grade" data-busy="Grading…"><button class="primary">Grade my answer</button></form>
@@ -28,34 +78,15 @@
       <button name="rating" value="{{ r }}" class="{{ 'primary' if r == suggested else '' }}">{{ rating_labels[r] }}</button>
     {% endfor %}
   </form>
-  {% if suggested %}<p class="muted">Highlighted: the rating the grade suggests. It's your call.</p>{% endif %}
+  {% if suggested %}<p class="muted">Highlighted: the rating your grade suggests. It's your call.</p>{% endif %}
 </section>
 {% else %}
 <section class="card"><a class="button primary" href="/practice">Next</a></section>
 {% endif %}
 
-<section class="card">
-  <h2>Lens</h2>
-  {% for pl in lenses %}
-    <p><b>{{ pl.lens.name }}</b><br><span class="muted">{{ pl.lens.question }}</span></p>
-  {% endfor %}
-  <p class="muted">{{ problem.source }} · {{ problem.source_label }} · <a href="{{ problem.solution_url }}" target="_blank" rel="noopener">source</a></p>
-  {% for pl in lenses if pl.curator_notes %}<p class="note">Curator's note: {{ pl.curator_notes }}</p>{% endfor %}
-</section>
-
-<details class="card" open>
-  <summary><h2>Official solution</h2></summary>
-  <div class="math">{{ problem.solution | md }}</div>
-</details>
-
-<details class="card">
-  <summary><h2>Your answer</h2></summary>
-  <div class="math">{{ attempt.answer_text | md }}</div>
-  {% for name in attempt.photo_paths %}<img class="photo" src="/uploads/{{ name }}" alt="your handwritten work">{% endfor %}
-</details>
-
-<details class="card">
-  <summary><h2>Problem</h2></summary>
-  <div class="math">{{ problem.statement | md }}</div>
-</details>
+{{ lens_card() }}
+{{ solution_card(true) }}
+{{ answer_card(false) }}
+{{ problem_card() }}
+{% endif %}
 {% endblock %}

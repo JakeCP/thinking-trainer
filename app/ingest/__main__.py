@@ -2,8 +2,6 @@
 
 import argparse
 import logging
-import os
-import sys
 from pathlib import Path
 
 from app.config import load_settings
@@ -23,9 +21,8 @@ def main() -> None:
     parser.add_argument("--originals-dir", type=Path, help="directory holding substitute_exercises.html")
     args = parser.parse_args()
 
-    if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
-        # Without this, every document would be fetched and then fail extraction.
-        sys.exit("ANTHROPIC_API_KEY isn't set. Add it to .env (or the environment) and run again.")
+    if not settings.llm_enabled:
+        print("No ANTHROPIC_API_KEY: fetching documents only. Each problem waits at /review for you to copy in by hand.")
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     settings.data_dir.mkdir(parents=True, exist_ok=True)
@@ -40,6 +37,7 @@ def main() -> None:
         refetch=args.refetch,
         re_extract=args.re_extract,
         originals_dir=args.originals_dir,
+        extract_enabled=settings.llm_enabled,
     )
     print("\n".join(report.lines()))
     print("Review flagged problems at /review.")

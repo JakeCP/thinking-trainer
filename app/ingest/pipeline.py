@@ -4,6 +4,10 @@ Re-runnable. A document pair that has already been extracted is skipped unless
 re_extract is set, and re-extraction never overwrites a problem you've reviewed.
 Nothing in the curriculum is dropped silently: anything that can't be fetched,
 found or ingested becomes a needs_review placeholder that says why.
+
+Without an API key, ingest fetches documents but extracts nothing: each problem
+becomes a `not_extracted` placeholder for you to copy in by hand at /review. A
+placeholder you've approved or rejected is never sent for extraction later.
 """
 
 import logging
@@ -32,6 +36,7 @@ class Report:
     pairs_extracted: int = 0
     pairs_skipped: int = 0
     pairs_failed: int = 0
+    pairs_fetched_only: int = 0
     problems_ok: int = 0
     problems_review: int = 0
     desk_items: int = 0
@@ -41,7 +46,8 @@ class Report:
     def lines(self) -> list[str]:
         return [
             f"lenses: {self.lenses}",
-            f"document pairs: {self.pairs_extracted} extracted, {self.pairs_skipped} already done, {self.pairs_failed} failed",
+            f"document pairs: {self.pairs_extracted} extracted, {self.pairs_fetched_only} fetched only (no API key), "
+            f"{self.pairs_skipped} already done, {self.pairs_failed} failed",
             f"problems from this run: {self.problems_ok} ok, {self.problems_review} need review",
             f"desk items (labs, worked examples): {self.desk_items}",
             f"original substitutes: {self.originals}",
@@ -72,8 +78,8 @@ def _attach_targets(problem: Problem, targets: list[Target]) -> None:
             problem.lenses.append(ProblemLens(lens_id=t.lens_id, target_key=t.key, problem_ref=t.problem_ref, curator_notes=t.notes))
 
 
-def _placeholder(db: Session, target: Target, status: str, flags: list[dict], *, kind: str | None = None) -> Problem:
-    """A row for a curriculum entry that has no extracted text (yet)."""
+def _placeholder(db: Session, target: Target, status: str, flags: list[dict], *, kind: str | None = None, docs=None) -> Problem:
+    """A row for a curriculum entry that has no extracted text (yet). docs = (problem_doc, solution_doc) if fetched."""
     key = f"target:{target.key}"
     problem = db.scalar(select(Problem).where(Problem.ingest_key == key))
     if problem is None:
@@ -85,6 +91,8 @@ def _placeholder(db: Session, target: Target, status: str, flags: list[dict], *,
         problem.flags = flags
         problem.source_label = target.problem_ref
         problem.situation_based = target.situation_based
+        if docs:
+            problem.problem_doc_id, problem.solution_doc_id = docs[0].id, docs[1].id
     _attach_targets(problem, [target])
     return problem
 
@@ -93,9 +101,33 @@ def _normalize_label(label: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", label.lower()).strip()
 
 
-def ingest_pair(db: Session, llm: Llm, settings, targets: list[Target], lens_names, lens_terms, *, refetch: bool, re_extract: bool, report: Report, http_client=None) -> None:
+def ingest_pair(
+    db: Session,
+    llm: Llm,
+    settings,
+    targets: list[Target],
+    lens_names,
+    lens_terms,
+    *,
+    refetch: bool,
+    re_extract: bool,
+    report: Report,
+    extract_enabled: bool = True,
+    http_client=None,
+) -> None:
     problem_url, solution_url = targets[0].problem_url, targets[0].solution_url
     pair_prefix = f"pair:{problem_url}|{solution_url}|"
+
+    # Entries you've handled by hand (approved or rejected placeholders) stay yours.
+    handled = set(
+        db.scalars(
+            select(Problem.ingest_key).where(Problem.ingest_key.in_([f"target:{t.key}" for t in targets]), Problem.reviewed_at.is_not(None))
+        )
+    )
+    targets = [t for t in targets if f"target:{t.key}" not in handled]
+    if not targets:
+        report.pairs_skipped += 1
+        return
 
     already = db.scalar(select(Problem.id).where(Problem.ingest_key.startswith(pair_prefix)).limit(1))
     if already and not re_extract and not refetch:
@@ -113,6 +145,15 @@ def ingest_pair(db: Session, llm: Llm, settings, targets: list[Target], lens_nam
         detail = "; ".join(f"{d.url}: {d.error}" for d in failed)
         for t in targets:
             _placeholder(db, t, "needs_review", [flag("fetch_failed", detail)])
+            report.problems_review += 1
+        db.commit()
+        return
+
+    if not extract_enabled:
+        report.pairs_fetched_only += 1
+        for t in targets:
+            detail = "no API key, so nothing was extracted: copy the problem and its solution in from the source text below, or set ANTHROPIC_API_KEY and run make ingest again"
+            _placeholder(db, t, "needs_review", [flag("not_extracted", detail)], docs=(pdoc, sdoc))
             report.problems_review += 1
         db.commit()
         return
@@ -187,7 +228,7 @@ def ingest_pair(db: Session, llm: Llm, settings, targets: list[Target], lens_nam
 def _retire_leftovers(db: Session, pair_prefix: str, produced: set[str], covered: set[str]) -> None:
     """After a successful extraction, drop rows it superseded: placeholders for targets it
     now covers, and problems from an earlier extraction of this pair it didn't return.
-    Rows you've reviewed or practised are kept and flagged instead of deleted."""
+    Rows you've reviewed, practised or typed into are kept and flagged instead of deleted."""
     stale = list(db.scalars(select(Problem).where(Problem.ingest_key.in_([f"target:{k}" for k in covered]))))
     stale += [
         p
@@ -195,7 +236,8 @@ def _retire_leftovers(db: Session, pair_prefix: str, produced: set[str], covered
         if p.ingest_key not in produced
     ]
     for p in stale:
-        if p.reviewed_at is None and p.card is None and not db.scalar(select(Attempt.id).where(Attempt.problem_id == p.id).limit(1)):
+        typed_by_hand = p.ingest_key.startswith("target:") and (p.statement_served is not None or p.solution.strip())
+        if p.reviewed_at is None and not typed_by_hand and p.card is None and not db.scalar(select(Attempt.id).where(Attempt.problem_id == p.id).limit(1)):
             db.delete(p)
         elif not any(f["code"] == "superseded" for f in p.flags):
             p.flags = p.flags + [flag("superseded", "a later extraction no longer returns this row; check it against the new one")]
@@ -213,6 +255,7 @@ def run(
     refetch=False,
     re_extract=False,
     originals_dir: Path | None = None,
+    extract_enabled: bool = True,
     http_client=None,
 ) -> Report:
     report = Report()
@@ -239,7 +282,19 @@ def run(
 
     for group in group_by_document(targets).values():
         log.info("pair %s (%d targets)", group[0].problem_url, len(group))
-        ingest_pair(db, llm, settings, group, lens_names, terms, refetch=refetch, re_extract=re_extract, report=report, http_client=http_client)
+        ingest_pair(
+            db,
+            llm,
+            settings,
+            group,
+            lens_names,
+            terms,
+            refetch=refetch,
+            re_extract=re_extract,
+            report=report,
+            extract_enabled=extract_enabled,
+            http_client=http_client,
+        )
     return report
 
 

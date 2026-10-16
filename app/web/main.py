@@ -1,7 +1,6 @@
 """The web app. Server-rendered forms; a few lines of JS for math preview."""
 
 import logging
-import os
 import secrets
 from datetime import datetime, timezone
 from pathlib import Path
@@ -66,7 +65,9 @@ def create_app(settings: Settings | None = None, llm: Llm | None = None, Session
 
     def page(request: Request, name: str, db_: Session, **ctx) -> HTMLResponse:
         review_count = db_.scalar(select(func.count()).select_from(Problem).where(Problem.status == "needs_review")) or 0
-        return templates.TemplateResponse(request, name, {"review_count": review_count, "auth": bool(settings.app_password), **ctx})
+        return templates.TemplateResponse(
+            request, name, {"review_count": review_count, "auth": bool(settings.app_password), "llm_enabled": settings.llm_enabled, **ctx}
+        )
 
     # --- login ------------------------------------------------------------
 
@@ -96,14 +97,12 @@ def create_app(settings: Settings | None = None, llm: Llm | None = None, Session
     def home(request: Request, db_: Session = Depends(db)):
         counts = scheduling.queue_counts(db_, now(), settings.tz, settings.new_per_day)
         by_status = dict(db_.execute(select(Problem.status, func.count()).group_by(Problem.status)).all())
-        api_key_set = bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
-        return page(request, "home.html", db_, counts=counts, by_status=by_status, pending=scheduling.unrated_attempt(db_), api_key_set=api_key_set)
+        return page(request, "home.html", db_, counts=counts, by_status=by_status, pending=scheduling.unrated_attempt(db_))
 
     @app.get("/practice")
     def practice(request: Request, db_: Session = Depends(db)):
         if pending := scheduling.unrated_attempt(db_):
-            graded_or_failed = pending.verdict or pending.grading_error
-            return RedirectResponse(f"/attempts/{pending.id}" + ("" if graded_or_failed else "/grade"), status_code=303)
+            return RedirectResponse(_after_submit(pending), status_code=303)
         problem = scheduling.next_problem(db_, now(), settings.tz, settings.new_per_day)
         if problem is None:
             counts = scheduling.queue_counts(db_, now(), settings.tz, settings.new_per_day)
@@ -140,21 +139,36 @@ def create_app(settings: Settings | None = None, llm: Llm | None = None, Session
         attempt = Attempt(problem_id=problem.id, answer_text=answer, photo_paths=names, confidence=conf, shown_at=_parse_time(shown_at))
         db_.add(attempt)
         db_.commit()
-        return RedirectResponse(f"/attempts/{attempt.id}/grade", status_code=303)
+        return RedirectResponse(_after_submit(attempt), status_code=303)
+
+    def _after_submit(attempt: Attempt) -> str:
+        """Claude grades when there's a key; otherwise you grade yourself on the attempt page."""
+        needs_llm_grade = settings.llm_enabled and not attempt.verdict and not attempt.grading_error
+        return f"/attempts/{attempt.id}" + ("/grade" if needs_llm_grade else "")
 
     @app.get("/attempts/{attempt_id}/grade", response_class=HTMLResponse)
     def grading_page(attempt_id: int, request: Request, db_: Session = Depends(db)):
         """Interstitial: shows "grading…" while the browser POSTs to start the grade."""
         attempt = _attempt(db_, attempt_id)
-        if attempt.verdict:
+        if attempt.verdict or not settings.llm_enabled:
             return RedirectResponse(f"/attempts/{attempt.id}", status_code=303)
         return page(request, "grading.html", db_, attempt=attempt)
 
     @app.post("/attempts/{attempt_id}/grade")
     def run_grade(attempt_id: int, db_: Session = Depends(db)):
         attempt = _attempt(db_, attempt_id)
-        if not attempt.verdict:
+        if not attempt.verdict and settings.llm_enabled:
             grade(db_, llm, attempt, settings.uploads_dir)
+        return RedirectResponse(f"/attempts/{attempt.id}", status_code=303)
+
+    @app.post("/attempts/{attempt_id}/self-grade")
+    def self_grade(attempt_id: int, verdict: str = Form(...), db_: Session = Depends(db)):
+        if verdict not in ("correct", "partially_correct", "incorrect"):
+            raise HTTPException(400)
+        attempt = _attempt(db_, attempt_id)
+        if not attempt.verdict:
+            attempt.verdict, attempt.verdict_source = verdict, "self"
+            db_.commit()
         return RedirectResponse(f"/attempts/{attempt.id}", status_code=303)
 
     @app.get("/attempts/{attempt_id}", response_class=HTMLResponse)
@@ -169,6 +183,7 @@ def create_app(settings: Settings | None = None, llm: Llm | None = None, Session
             problem=attempt.problem,
             lenses=lenses,
             suggested=scheduling.suggested_rating(attempt.verdict),
+            self_grading=not attempt.verdict and not attempt.grading_error and not settings.llm_enabled,
         )
 
     @app.post("/attempts/{attempt_id}/rate")

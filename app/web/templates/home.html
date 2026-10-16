@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
-{% if not api_key_set %}<p class="banner"><code>ANTHROPIC_API_KEY</code> isn't set, so grading will fail. Set it in the environment and restart.</p>{% endif %}
+{% if not llm_enabled %}<p class="banner">Running without an API key: you grade your own answers, and problems are copied in by hand at <a href="/review">Review</a>. Add <code>ANTHROPIC_API_KEY</code> to <code>.env</code> and restart to switch both on.</p>{% endif %}
 <section class="card">
   {% if pending %}
     <p>You have a graded answer waiting for your rating.</p>

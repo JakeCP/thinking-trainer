@@ -1,4 +1,16 @@
 {% extends "base.html" %}
+{% macro source_text(open_first) %}
+{% set docs = [(problem.problem_doc, 'Source text')] %}
+{% if problem.solution_doc and problem.solution_doc_id != problem.problem_doc_id %}{% set docs = docs + [(problem.solution_doc, 'Solution source text')] %}{% endif %}
+{% for doc, label in docs if doc and doc.text_layer %}
+<details class="card" {{ 'open' if loop.first and open_first }}>
+  <summary><h2>{{ label }}</h2></summary>
+  <p class="muted">The document's own text, for copying from. Math is often garbled here; check it against the <a href="{{ doc.url }}" target="_blank" rel="noopener">original</a>.</p>
+  <pre class="source-text">{{ doc.text_layer }}</pre>
+</details>
+{% endfor %}
+{% endmacro %}
+
 {% block main %}
 <section class="card">
   <p><b>{{ problem.source }}</b> · {{ problem.source_label }} {% if problem.parts %}· parts {{ problem.parts }}{% endif %}</p>
@@ -10,8 +22,15 @@
   {% if problem.flags %}<ul class="flags">{% for f in problem.flags %}<li><code>{{ f.code }}</code> {{ f.detail }}</li>{% endfor %}</ul>{% endif %}
 </section>
 
+{% set empty = not problem.statement.strip() %}
+{% if empty %}{{ source_text(true) }}{% endif %}
+
 <form method="post" class="card stack">
-  <label for="st">Statement as served <span class="muted">(edit to fix or redact; the extracted original is kept below)</span></label>
+  {% if empty %}
+  <label for="st">Statement <span class="muted">(copy it in from the source text above)</span></label>
+  {% else %}
+  <label for="st">Statement as served <span class="muted">(edit to fix or redact; the extracted original is kept)</span></label>
+  {% endif %}
   <textarea id="st" name="statement_served" rows="12" data-preview="st-preview">{{ problem.statement }}</textarea>
   <div id="st-preview" class="preview math"></div>
   <label for="sol">Solution</label>
@@ -26,6 +45,10 @@
     <button name="action" value="approve" class="primary">Approve</button>
   </div>
 </form>
+
+
+
+{% if not empty %}{{ source_text(false) }}{% endif %}
 
 {% if problem.statement_served is not none %}
 <details class="card">

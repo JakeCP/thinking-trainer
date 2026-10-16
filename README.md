@@ -10,11 +10,24 @@ next. Design and rationale: [`docs/DESIGN.md`](docs/DESIGN.md).
 Needs [uv](https://docs.astral.sh/uv/getting-started/installation/) and `make`.
 
 ```bash
-make start     # first time: creates .env and stops so you can add ANTHROPIC_API_KEY
-make start     # again: installs, builds the problem bank, starts the app
+make start     # creates .env, installs, builds the problem bank, starts the app
 ```
 
 To try the extraction on one lens before paying for all of them, use `make start LENS=17`.
+
+### With or without an API key
+
+`ANTHROPIC_API_KEY` in `.env` is optional.
+
+| | with a key | without |
+|---|---|---|
+| building the bank | Claude transcribes each problem; clean ones go straight into rotation | documents are fetched, and every problem waits at `/review` for you to copy it in from the source text (easier at a desk than on a phone) |
+| grading | Claude grades your reasoning and says where you went wrong | you see the official solution and mark yourself Right / Partly / Wrong |
+
+You can add a key later: restart, run `make ingest`, and Claude extracts whatever you
+haven't already entered. Problems you've approved by hand are never re-extracted, and a
+half-typed one is kept and flagged rather than replaced. Self-grades are stored as
+yours, separately from Claude's.
 
 Then open http://127.0.0.1:8000. After the first time:
 

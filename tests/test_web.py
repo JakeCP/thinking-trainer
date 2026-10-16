@@ -164,3 +164,58 @@ def test_render_keeps_math_and_escapes_html():
     out = str(render("Let $x_1 * y_2$ and **bold** <script>alert(1)</script>\n\n| a | b |\n|---|---|\n| 1 | 2 |"))
     assert "$x_1 * y_2$" in out and "<strong>bold</strong>" in out
     assert "<script>" not in out and "<table>" in out
+
+
+# --- without an API key ------------------------------------------------------
+
+
+@pytest.fixture
+def nokey(settings, Session_, llm):
+    return TestClient(create_app(replace(settings, llm_enabled=False), llm, Session_))
+
+
+def test_without_key_you_grade_yourself(nokey, db, problem, transport):
+    assert "Running without an API key" in nokey.get("/").text
+    r = nokey.post(f"/problems/{problem.id}/attempt", data={"answer": "W = 1/(mu - lambda)", "confidence": "70"})
+    attempt = db.scalar(select(Attempt))
+    assert r.url.path == f"/attempts/{attempt.id}"
+    # Solution and your answer come before the verdict buttons; no rating until you've judged it.
+    assert r.text.index("Official solution") < r.text.index("Were you right?")
+    assert 'name="rating"' not in r.text
+    assert nokey.get(f"/attempts/{attempt.id}/grade").url.path == f"/attempts/{attempt.id}"
+    assert nokey.get("/practice").url.path == f"/attempts/{attempt.id}"
+
+    r = nokey.post(f"/attempts/{attempt.id}/self-grade", data={"verdict": "partially_correct"})
+    assert "(your call)" in r.text and 'value="2" class="primary"' in r.text
+    db.expire_all()
+    attempt = db.get(Attempt, attempt.id)
+    assert (attempt.verdict, attempt.verdict_source) == ("partially_correct", "self")
+
+    nokey.post(f"/attempts/{attempt.id}/rate", data={"rating": "2"})
+    db.expire_all()
+    assert db.get(Card, problem.id) is not None
+    assert transport.sent == []  # never called Claude
+
+
+def test_self_grade_rejects_unknown_verdicts_and_never_overwrites(nokey, db, problem):
+    nokey.post(f"/problems/{problem.id}/attempt", data={"answer": "x"})
+    attempt = db.scalar(select(Attempt))
+    assert nokey.post(f"/attempts/{attempt.id}/self-grade", data={"verdict": "ungradeable"}).status_code == 400
+    nokey.post(f"/attempts/{attempt.id}/self-grade", data={"verdict": "correct"})
+    nokey.post(f"/attempts/{attempt.id}/self-grade", data={"verdict": "incorrect"})
+    db.expire_all()
+    assert db.get(Attempt, attempt.id).verdict == "correct"
+
+
+def test_review_shows_source_text_for_copying(client, db, problem):
+    from app.models import SourceDoc
+
+    doc = SourceDoc(url="https://example.edu/ps3.pdf", kind="pdf", text_layer="Problem 1. Customers arrive at rate two per hour.")
+    db.add(doc)
+    db.flush()
+    problem.status, problem.problem_doc_id, problem.solution_doc_id = "needs_review", doc.id, doc.id
+    problem.statement_original, problem.solution = "", ""
+    db.commit()
+    page = client.get(f"/review/{problem.id}").text
+    assert "Customers arrive at rate two per hour." in page
+    assert page.count("Source text") == 1  # same document for both: shown once

@@ -50,6 +50,7 @@ def grade(db: Session, llm: Llm, attempt: Attempt, uploads_dir: Path) -> Attempt
         return attempt
     attempt.grade = result.model_dump()
     attempt.verdict = result.verdict
+    attempt.verdict_source = "llm"
     attempt.feedback = result.where_wrong
     attempt.solution_concern = result.solution_concern
     attempt.grading_error = None

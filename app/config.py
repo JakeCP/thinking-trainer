@@ -2,7 +2,7 @@
 
 import os
 import secrets
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -17,6 +17,8 @@ class Settings:
     session_secret: str
     new_per_day: int
     tz: ZoneInfo
+    # Without credentials the app still runs: you grade yourself and copy problems in by hand.
+    llm_enabled: bool
     prompts_dir: Path = ROOT / "prompts"
     content_dir: Path = ROOT / "content"
 
@@ -39,4 +41,5 @@ def load_settings() -> Settings:
         session_secret=os.environ.get("SESSION_SECRET") or secrets.token_hex(32),
         new_per_day=int(os.environ.get("NEW_PER_DAY", "3")),
         tz=ZoneInfo(os.environ.get("APP_TZ", "UTC")),
+        llm_enabled=bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")),
     )

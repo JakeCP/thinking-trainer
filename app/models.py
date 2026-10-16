@@ -68,6 +68,8 @@ class Problem(Base):
     desk_done_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
     created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=utcnow)
 
+    problem_doc: Mapped["SourceDoc | None"] = relationship(foreign_keys=[problem_doc_id])
+    solution_doc: Mapped["SourceDoc | None"] = relationship(foreign_keys=[solution_doc_id])
     lenses: Mapped[list["ProblemLens"]] = relationship(back_populates="problem", cascade="all, delete-orphan")
     card: Mapped["Card | None"] = relationship(back_populates="problem", cascade="all, delete-orphan")
 
@@ -120,6 +122,7 @@ class Attempt(Base):
     photo_paths: Mapped[list] = mapped_column(JSON, default=list)
     confidence: Mapped[int | None] = mapped_column(Integer)  # 0-100, entered before the grade
     verdict: Mapped[str | None] = mapped_column(String)
+    verdict_source: Mapped[str | None] = mapped_column(String)  # llm | self
     feedback: Mapped[str | None] = mapped_column(Text)
     grade: Mapped[dict | None] = mapped_column(JSON)
     solution_concern: Mapped[str | None] = mapped_column(Text)

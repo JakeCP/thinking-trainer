@@ -115,6 +115,13 @@ Steps:
 
 Generated content never enters `problem`. The two tables share no code path for creation.
 
+### Running without an API key
+Everything above works without a key, with two substitutions:
+- **Ingest fetches but doesn't extract.** Each exercise becomes a `not_extracted` placeholder, and the review page shows the document's text layer to copy from. Nothing is guessed: the alternative to the model is you.
+- **You grade yourself.** After answering you see the official solution, then mark Right / Partly / Wrong. `attempt.verdict_source` records `self` or `llm`, so accuracy stats can keep the two apart.
+
+Adding a key later picks up where you left off. Approved or rejected placeholders are never sent for extraction. A placeholder with hand-typed text is kept and flagged `superseded` rather than deleted.
+
 ### Serving and scheduling
 - A session builds a queue of due cards, plus up to N new cards per day (default 3), ordered so that no two consecutive problems share a lens when that can be avoided.
 - The problem page shows the statement only: no lens, course, or problem-set label. After you submit, you see the grade and feedback, then the official solution, lens, and source link, then the 1–4 rating buttons.

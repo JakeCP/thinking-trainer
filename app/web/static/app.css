@@ -69,3 +69,5 @@ li.done > a { text-decoration: line-through; color: var(--muted); }
 .ratings button { padding: 10px 4px; white-space: nowrap; }
 .list .flags li { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .banner { background: var(--note-bg); border: 1px solid var(--mid); border-radius: 8px; padding: 10px 12px; margin: 12px 0; font-size: .92rem; }
+.ratings.three { grid-template-columns: repeat(3, 1fr); }
+.source-text { white-space: pre-wrap; font-size: .8rem; max-height: 60vh; overflow: auto; }

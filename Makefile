@@ -24,5 +24,5 @@ test: ## run the tests (no network, no API key needed)
 
 .env:
 	cp .env.example .env
-	@echo "Created .env. Put your ANTHROPIC_API_KEY in it, then run the same make command again."
-	@exit 1
+	@echo "Created .env. Optional: add ANTHROPIC_API_KEY to it for Claude extraction and grading."
+	@echo "Without a key you grade yourself and copy problems in by hand at /review."
