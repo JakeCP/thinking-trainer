@@ -7,25 +7,34 @@ next. Design and rationale: [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## Run it
 
+Needs [uv](https://docs.astral.sh/uv/getting-started/installation/) and `make`.
+
 ```bash
-uv sync
-cp .env.example .env          # then fill in ANTHROPIC_API_KEY
-set -a; . ./.env; set +a
-uv run python -m app.ingest   # builds the problem bank from content/curriculum.json
-uv run uvicorn app.web.main:app_factory --factory --reload
+make start     # first time: creates .env and stops so you can add ANTHROPIC_API_KEY
+make start     # again: installs, builds the problem bank, starts the app
 ```
 
-Open http://127.0.0.1:8000. The database and caches live in `data/` (gitignored).
-Migrations run on start-up, so there's no separate migrate step.
+To try the extraction on one lens before paying for all of them, use `make start LENS=17`.
+
+Then open http://127.0.0.1:8000. After the first time:
+
+| command | what it does |
+|---|---|
+| `make run` | start the app (`PORT=8001` to change the port) |
+| `make ingest` | build or update the problem bank; `LENS="17"` or `LENS="3 17"` for some lenses, `ARGS="--re-extract"` for other flags |
+| `make test` | run the tests (no network or key needed) |
+| `make` | list the commands |
+
+The database and caches live in `data/` (gitignored). Migrations run automatically.
 
 ## The workflow
 
-1. **Ingest.** `python -m app.ingest` fetches each document once (cached in
+1. **Ingest.** `make ingest` fetches each document once (cached in
    `data/cache/`), makes one Claude call per document pair to transcribe the problems
    your curriculum names, and checks every transcription against the PDF's own text.
    Anything that doesn't pass goes to review; nothing is dropped silently. Re-running
    it is safe: extracted pairs are skipped, failed ones are retried.
-   - `--lens 17`: only one lens (repeatable)
+   Flags go in `ARGS`, as in `make ingest ARGS="--re-extract"`:
    - `--re-extract`: re-run extraction (problems you've reviewed are never overwritten)
    - `--refetch`: download documents again
    - `--originals-dir DIR`: load the original substitutes from `DIR/substitute_exercises.html`
